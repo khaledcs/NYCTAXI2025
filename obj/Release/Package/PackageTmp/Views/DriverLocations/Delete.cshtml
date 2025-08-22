@@ -1,0 +1,87 @@
+﻿@model ABC_Taxi_System.Models.DriverLocation
+
+@{
+    ViewBag.Title = "Delete Driver Location";
+}
+
+@if ((ViewData.ContainsKey("UserType") && ViewData["UserType"].Equals("Passenger")) ||
+    (ViewData.ContainsKey("UserType") && ViewData["UserType"].Equals("Driver") && ViewData.ContainsKey("Username") && ViewData["Username"].ToString() != Model.Driver))
+{
+    <div class="alert alert-warning text-align-center" style="margin-top:20px;">
+        Sorry, you do not have the permission to access this page. @ViewBag.Message<strong><a href="/Home/Index">Go Back to Home Page</a></strong>
+    </div>
+}
+else if (ViewBag.Message != null)
+{
+    <br />
+    <div class="alert alert-danger">
+        <strong>Error!</strong> @ViewBag.Message
+    </div>
+}
+else
+{
+    <h2>Delete Location</h2>
+    <h4>For: @Model.User.FirstName @Model.User.LastName | @Model.User.Username</h4>
+
+    <h3>Are you sure you want to delete this?</h3>
+    <div>
+        <hr />
+        <dl class="dl-location-horizontal">
+            @if (Model.StreetNo != null)
+            {
+                <dt>
+                    @Html.DisplayNameFor(model => model.StreetNo)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.StreetNo)
+                </dd>
+            }
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Route)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Route)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.City)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.City)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Province)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Province)
+            </dd>
+
+            @if (Model.ZipCode != null)
+            {
+                <dt>
+                    @Html.DisplayNameFor(model => model.ZipCode)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.ZipCode)
+                </dd>
+            }
+        </dl>
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-actions no-color">
+                <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-times-circle"></i> Delete</button> |
+                @Html.ActionLink("Back", "Details", new { id = Model.Driver })
+            </div>
+        }
+    </div>
+}

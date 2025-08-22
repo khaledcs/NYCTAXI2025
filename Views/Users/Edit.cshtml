@@ -1,0 +1,135 @@
+﻿@model NYC_Taxi_System.Models.User
+
+@{
+    ViewBag.Title = "Update User Details";
+}
+
+@if (ViewData.ContainsKey("Username") && ViewData["Username"].ToString() == Model.Username ||
+    (Model.UserType == "Operator" && ViewData.ContainsKey("UserType") && ViewData["UserType"].ToString() == "Operator"))
+{
+    <h2>Update User Details</h2>
+
+    if (ViewBag.Status != null && Convert.ToBoolean(ViewBag.Status))
+    {
+        if (ViewBag.Message != null)
+        {
+            <hr />
+            <div class="alert alert-success">
+                <strong>Congratulations!</strong> @ViewBag.Message <a href="mailto:@ViewData["Email"]">@ViewData["Email"]</a>
+            </div>
+        }
+    }
+    else
+    {
+        using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+                <hr />
+
+                @if (ViewBag.Message != null)
+                {
+                    <div class="alert alert-danger">
+                        <strong>Error!</strong> @ViewBag.Message
+                    </div>
+                }
+
+                <div class="row">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.HiddenFor(model => model.Username)
+                    @Html.HiddenFor(model => model.UserType)
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="col-md-6">
+                                @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "control-label" })
+                                <div class="inputWithIcon">
+                                    @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control", placeholder = "First Name" } })
+                                    <i class="fas fa-user-alt"></i>
+                                    @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label" })
+                                <div class="inputWithIcon">
+                                    @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control", placeholder = "Last Name" } })
+                                    <i class="fas fa-user-alt"></i>
+                                    @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="col-md-4">
+                                @Html.LabelFor(model => model.Phone, htmlAttributes: new { @class = "control-label" })
+                                <div class="inputWithIcon">
+                                    @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control", placeholder = "Phone Number" } })
+                                    <i class="fas fa-phone"></i>
+                                    @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="col-md-8">
+                                @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label" })
+                                <div class="inputWithIcon">
+                                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", placeholder = "Email" } })
+                                    <i class="fas fa-envelope"></i>
+                                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                                    @Html.ValidationMessage("EmailExist", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="col-md-6">
+                                @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label" })
+                                <div class="inputWithIcon">
+                                    @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", placeholder = "Password", Value = "" } })
+                                    <i class="fas fa-key"></i>
+                                    @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                @Html.LabelFor(model => model.ConfirmPassword, htmlAttributes: new { @class = "control-label" })
+                                <div class="inputWithIcon">
+                                    @Html.EditorFor(model => model.ConfirmPassword, new { htmlAttributes = new { @class = "form-control", placeholder = "Confirm Password" } })
+                                    <i class="fas fa-key"></i>
+                                    @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="col-md-1">
+                                <button type="submit" class="btn btn-warning" style="margin-top: 20px"><i class="fas fa-user-edit"></i> Update</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        <div>
+            @Html.ActionLink("Back", "Details", new { Id = Model.Username })
+        </div>
+    }
+}
+else
+{
+    <div class="alert alert-warning text-align-center" style="margin-top:20px;">
+        Sorry, you do not have the permission to access this page. @ViewBag.Message<strong><a href="/Home/Index">Go Back to Home Page</a></strong>
+    </div>
+
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

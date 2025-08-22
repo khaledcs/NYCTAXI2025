@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="09576819a9374620a727b1420f926753" Name="Diagram1">
+        <EntityTypeShape EntityType="ABC_DBModel.DriverAvailability" Width="1.5" PointX="3" PointY="7.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ABC_DBModel.DriverLocation" Width="1.5" PointX="3" PointY="10.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ABC_DBModel.DriverVehicle" Width="1.5" PointX="6" PointY="8.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ABC_DBModel.Reservation" Width="1.5" PointX="9" PointY="6.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ABC_DBModel.User" Width="1.5" PointX="0.75" PointY="8.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ABC_DBModel.VehicleType" Width="1.5" PointX="3.75" PointY="4.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ABC_DBModel.WaitingTime" Width="1.5" PointX="11.25" PointY="9.125" IsExpanded="true" />
+        <AssociationConnector Association="ABC_DBModel.FK_User_DriverAvailability" ManuallyRouted="false" />
+        <AssociationConnector Association="ABC_DBModel.FK_User_DriverLocation" ManuallyRouted="false" />
+        <AssociationConnector Association="ABC_DBModel.FK_User_DriverVehicle" ManuallyRouted="false" />
+        <AssociationConnector Association="ABC_DBModel.FK_VehicleType_DriverVehicle" ManuallyRouted="false" />
+        <AssociationConnector Association="ABC_DBModel.FK_Reservation_WaitingTime" ManuallyRouted="false" />
+        <AssociationConnector Association="ABC_DBModel.FK_User_Reservation_Driver" ManuallyRouted="false" />
+        <AssociationConnector Association="ABC_DBModel.FK_User_Reservation_Passenger" ManuallyRouted="false" />
+        <AssociationConnector Association="ABC_DBModel.FK_VehicleType_Reservation" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="ABC_DBModel.Feedback" Width="1.5" PointX="11.25" PointY="6.125" />
+        <AssociationConnector Association="ABC_DBModel.FK_Reservation_Feedback" />
+        <AssociationConnector Association="ABC_DBModel.FK_User_Feedback" />
+        <EntityTypeShape EntityType="ABC_DBModel.DriverStatusCount" Width="1.5" PointX="5.25" PointY="13.125" />
+        <AssociationConnector Association="ABC_DBModel.FK_User_DriverStatus" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

@@ -1,0 +1,89 @@
+﻿@model ABC_Taxi_System.Models.DriverVehicle
+
+@{
+    ViewBag.Title = "Vehicle Details";
+}
+
+@if ((ViewData.ContainsKey("UserType") && ViewData["UserType"].Equals("Passenger")) ||
+    (ViewData.ContainsKey("UserType") && ViewData["UserType"].Equals("Driver") && ViewData.ContainsKey("Username") && ViewData["Username"].ToString() != Model.Driver))
+{
+    <div class="alert alert-warning text-align-center" style="margin-top:20px;">
+        Sorry, you do not have the permission to access this page. @ViewBag.Message<strong><a href="/Home/Index">Go Back to Home Page</a></strong>
+    </div>
+}
+else
+{
+    <h2>Vehicle Details</h2>
+    <h4>For: @Model.User.FirstName @Model.User.LastName | @Model.User.Username</h4>
+    <hr />
+    <dl class="dl-vehicle-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Type)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.VehicleType.Type)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Seats)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Seats)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Brand)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Brand)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.VRN)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.VRN)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.InsuranceNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.InsuranceNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LicenseNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LicenseNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NIC)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NIC)
+        </dd>
+
+    </dl>
+    <p>
+        @Html.ActionLink("Update", "Edit", new { id = Model.Driver }) |
+        @Html.ActionLink("Delete", "Delete", new { id = Model.Driver }) |
+        @if (ViewData.ContainsKey("UserType") && ViewData["UserType"].Equals("Operator"))
+        {
+            @Html.ActionLink("Back to List", "Index", "DriverVehicles")
+        }
+        else
+        {
+            @Html.ActionLink("Back to Home", "Index", "Home")
+        }
+    </p>
+}

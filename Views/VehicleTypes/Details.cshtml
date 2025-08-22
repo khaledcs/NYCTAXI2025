@@ -1,0 +1,39 @@
+﻿@model NYC_Taxi_System.Models.VehicleType
+
+@{
+    ViewBag.Title = "Vehicle Type Details";
+}
+
+@if (ViewData.ContainsKey("UserType") && ViewData["UserType"].ToString() != "Operator")
+{
+    <div class="alert alert-warning text-align-center" style="margin-top:20px;">
+        Sorry, you do not have the permission to access this page. @ViewBag.Message<strong><a href="/Home/Index">Go Back to Home Page</a></strong>
+    </div>
+}
+else
+{
+    <h2>Vehicle Type Details</h2>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Type)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Type)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Rate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Rate)
+        </dd>
+
+    </dl>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+}

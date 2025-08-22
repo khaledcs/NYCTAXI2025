@@ -1,0 +1,192 @@
+﻿@model NYC_Taxi_System.Models.Reservation
+
+@{
+    ViewBag.Title = "Reservation Details";
+}
+
+@if ((Model.User_Passenger == null && ViewData.ContainsKey("UserType") && ViewData["UserType"].ToString() == "Passenger") ||
+    (Model.User_Passenger != null && ViewData.ContainsKey("UserType") && ViewData["UserType"].ToString() == "Passenger" &&
+    ViewData.ContainsKey("Username") && ViewData["Username"].ToString() != Model.User_Passenger.Username) ||
+    (Model.User_Driver == null && ViewData.ContainsKey("UserType") && ViewData["UserType"].ToString() == "Driver") ||
+    (Model.User_Driver != null && ViewData.ContainsKey("UserType") && ViewData["UserType"].ToString() == "Driver" &&
+    ViewData.ContainsKey("Username") && ViewData["Username"].ToString() != Model.User_Driver.Username))
+{
+    <div class="alert alert-warning text-align-center" style="margin-top:20px;">
+        Sorry, you do not have the permission to access this page. @ViewBag.Message<strong><a href="/Home/Index">Go Back to Home Page</a></strong>
+    </div>
+}
+else if (ViewData.ContainsKey("UserType") && ViewData["UserType"].ToString() == "Driver" && Model.User_Driver.DriverVehicle == null ||
+    ViewData.ContainsKey("UserType") && ViewData["UserType"].ToString() == "Driver" && Model.User_Driver.DriverLocation == null)
+{
+    <div class="alert alert-danger text-align-center" style="margin-top:20px;">
+        You have to add your vehicle and location details into the system before accessing this page. <strong><a href="/Home/Index">Go Back to Home Page</a></strong>
+    </div>
+}
+else
+{
+    <h2>Reservation Details</h2>
+    if (Model.Passenger != null)
+    {
+        <h4>For: @Model.User_Passenger.FirstName @Model.User_Passenger.LastName | @Model.User_Passenger.Username</h4>
+    }
+    else
+    {
+        <h4>For: @Model.FirstName @Model.LastName</h4>
+    }
+
+    <div>
+        <hr />
+        <dl class="dl-horizontal">
+
+            <div>
+                <h4>Passenger Details:</h4>
+                <hr />
+            </div>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.User_Passenger.FirstName)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.User_Passenger.FirstName)
+                @Html.DisplayFor(model => model.FirstName)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.User_Passenger.LastName)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.User_Passenger.LastName)
+                @Html.DisplayFor(model => model.LastName)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.User_Passenger.Phone)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.User_Passenger.Phone)
+                @Html.DisplayFor(model => model.Phone)
+            </dd>
+
+            <div>
+                <hr />
+                <h4>Pick-Up Details:</h4>
+                <hr />
+            </div>
+
+            <dt>
+                @Html.DisplayName("Pick-Up Date")
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.PickUpDate)
+            </dd>
+
+            <dt>
+                @Html.DisplayName("Pick-Up Time")
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.PickUpTime)
+            </dd>
+
+            <dt>
+                @Html.DisplayName("Pick-Up Location")
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.PickUpStreetNo)
+                @Html.DisplayFor(model => model.PickUpRoute),
+                @Html.DisplayFor(model => model.PickUpCity),
+                @Html.DisplayFor(model => model.PickUpProvince)
+                @Html.DisplayFor(model => model.PickUpZipCode)
+            </dd>
+
+            <div>
+                <hr />
+                <h4>Destination Details:</h4>
+                <hr />
+            </div>
+
+            <dt>
+                @Html.DisplayName("Destination Location")
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.DropStreetNo)
+                @Html.DisplayFor(model => model.DropRoute),
+                @Html.DisplayFor(model => model.DropCity),
+                @Html.DisplayFor(model => model.DropProvince)
+                @Html.DisplayFor(model => model.DropZipCode)
+            </dd>
+
+            <dt>
+                @Html.DisplayName("Trip Charge (CAD)")
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Charge)
+            </dd>
+
+            <div>
+                <hr />
+                <h4>Driver Details:</h4>
+                <hr />
+            </div>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.User_Driver.FirstName)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.User_Driver.FirstName)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.User_Driver.LastName)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.User_Driver.LastName)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.User_Driver.Phone)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.User_Driver.Phone)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.VehicleType.Type)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.VehicleType.Type)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Status)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Status)
+            </dd>
+            <hr />
+
+        </dl>
+    </div>
+    <p>
+        @if (ViewData.ContainsKey("UserType") && ViewData["UserType"].ToString() != "Driver" && Model.Status == "Not Assigned" ||
+            ViewData.ContainsKey("UserType") && ViewData["UserType"].ToString() != "Driver" && Model.Status == "Assigned" ||
+            ViewData.ContainsKey("UserType") && ViewData["UserType"].ToString() != "Driver" && Model.Status == "Rejected")
+        {
+            @Html.ActionLink("Update", "Edit", new { id = Model.Reservation_Id })
+            @Html.DisplayName(" | ")
+        }
+        @Html.ActionLink("Back to List", "Index", new { Id = ViewData["Username"] })
+    </p>
+}

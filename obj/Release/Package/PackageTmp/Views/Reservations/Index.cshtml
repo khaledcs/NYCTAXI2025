@@ -1,0 +1,198 @@
+﻿@model PagedList.IPagedList<ABC_Taxi_System.Models.Reservation>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewBag.Title = "Reservations List";
+}
+
+@if (ViewData.ContainsKey("Username") && ViewData["Username"].ToString().ToLower() != ViewData["ReservationUser"].ToString().ToLower())
+{
+    <div class="alert alert-warning text-align-center" style="margin-top:20px;">
+        Sorry, you do not have the permission to access this page. @ViewBag.Message<strong><a href="/Home/Index">Go Back to Home Page</a></strong>
+    </div>
+}
+else if (ViewData.ContainsKey("UserType") && ViewData["UserType"].ToString() == "Driver" && ViewData.ContainsKey("IsValid") && ViewData["IsValid"].ToString() == "false")
+{
+    <div class="alert alert-danger text-align-center" style="margin-top:20px;">
+        You have to add your vehicle and location details into the system before accessing this page. <strong><a href="/Home/Index">Go Back to Home Page</a></strong>
+    </div>
+}
+else
+{
+    <h2>Reservations List</h2>
+    <h4>For: @ViewData["FullName"] | @ViewData["Username"]</h4>
+    <hr />
+    <br />
+
+    using (Html.BeginForm("Index", "Reservations", FormMethod.Get))
+    {
+        <div class="row">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="col-xs-7 indexBar" style="padding:0px">
+                        <div class="col-xs-5 inputWithIcon" style="min-width:200px; margin-top:-28px">
+                            @Html.Label("Reservation Status", htmlAttributes: new { @class = "control-label", style = "margin-bottom: -5px" })
+                            @Html.DropDownList("state", new SelectList(ViewBag.States as System.Collections.IEnumerable), "-- Select Status --", new { @class = "form-control" })
+                            <i class="fas fa-user-tag" style="margin-top:28px; margin-left:15px"></i>
+                        </div>
+                        <div class="col-xs-2">
+                            @if (ViewData.ContainsKey("UserType") && ViewData["UserType"].ToString() != "Driver")
+                            {
+                                <a class="btn btn-warning" href="~/Reservations/Create" role="button"><i class="fas fa-clipboard-check"></i> Add New</a>
+                            }
+                        </div>
+                    </div>
+                    <div class="col-xs-4 indexSearch inputWithIcon">
+                        @Html.Editor("searchString", ViewBag.CurrentFilter as string, new { htmlAttributes = new { @class = "form-control", placeholder = "Search" } })
+                        <i class="fas fa-search" style="margin-top:8px; margin-left:20px"></i>
+                    </div>
+                    <div class="col-xs-1" style="margin-bottom:8px">
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <table class="table table-striped table-hover table-bordered table-responsive">
+        <tr style="background:#f0ad4e; color:white">
+            <th>
+                @Html.DisplayName("Passenger Name")
+            </th>
+            <th>
+                @Html.DisplayName("Passenger Phone")
+            </th>
+            <th>
+                @Html.DisplayName("Pick-Up Date")
+            </th>
+            <th>
+                @Html.DisplayName("Pick-Up Time")
+            </th>
+            <th>
+                @Html.DisplayName("Pick-Up Location")
+            </th>
+            <th>
+                @Html.DisplayName("Destination Location")
+            </th>
+            <th>
+                @Html.DisplayName("Driver Name")
+            </th>
+            <th>
+                @Html.DisplayName("Driver Phone")
+            </th>
+            <th>
+                @Html.DisplayName("Driver Vehicle")
+            </th>
+            <th>
+                @Html.DisplayName("Trip Charge (LKR)")
+            </th>
+            <th>
+                @Html.DisplayName("Reservation Status")
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td class="warning">
+                    @Html.DisplayFor(modelItem => item.User_Passenger.FirstName)
+                    @Html.DisplayFor(modelItem => item.User_Passenger.LastName)
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                    @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.User_Passenger.Phone)
+                    @Html.DisplayFor(modelItem => item.Phone)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PickUpDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PickUpTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PickUpStreetNo)
+                    @Html.DisplayFor(modelItem => item.PickUpRoute),
+                    @Html.DisplayFor(modelItem => item.PickUpCity),
+                    @Html.DisplayFor(modelItem => item.PickUpProvince)
+                    @Html.DisplayFor(modelItem => item.PickUpZipCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DropStreetNo)
+                    @Html.DisplayFor(modelItem => item.DropRoute),
+                    @Html.DisplayFor(modelItem => item.DropCity),
+                    @Html.DisplayFor(modelItem => item.DropProvince)
+                    @Html.DisplayFor(modelItem => item.DropZipCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.User_Driver.FirstName)
+                    @Html.DisplayFor(modelItem => item.User_Driver.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.User_Driver.Phone)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.VehicleType.Type)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Charge)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    @if (ViewData.ContainsKey("UserType") && ViewData["UserType"].ToString() != "Driver" && item.Status == "Not Assigned" ||
+                    ViewData.ContainsKey("UserType") && ViewData["UserType"].ToString() != "Driver" && item.Status == "Assigned" ||
+                    ViewData.ContainsKey("UserType") && ViewData["UserType"].ToString() != "Driver" && item.Status == "Rejected")
+                    {
+                        @Html.ActionLink("Update", "Edit", new { id = item.Reservation_Id })
+                        @Html.DisplayName(" | ")
+                        @Html.ActionLink("Change Driver", "SelectDriver", new { id = item.Reservation_Id })
+                        @Html.DisplayName(" | ")
+                    }
+                    @if (ViewData.ContainsKey("UserType") && ViewData["UserType"].ToString() == "Driver" && item.Status == "Assigned")
+                    {
+                        @Html.ActionLink("Accept", "ReservationAccepted", new { id = item.Reservation_Id })
+                        @Html.DisplayName(" | ")
+                        @Html.ActionLink("Reject", "ReservationRejected", new { id = item.Reservation_Id })
+                        @Html.DisplayName(" | ")
+                    }
+                    @if (ViewData.ContainsKey("UserType") && ViewData["UserType"].ToString() == "Driver" && item.Status == "Accepted")
+                    {
+                        @Html.ActionLink("End Trip", "EndTrip", new { id = item.Reservation_Id })
+                        @Html.DisplayName(" | ")
+                        <a href="/WaitingTimes/Toggle/@item.Reservation_Id">Wait Timer</a>
+                        @Html.DisplayName(" | ")
+                    }
+                    @if (ViewData.ContainsKey("UserType") && ViewData["UserType"].ToString() == "Passenger" && item.Status == "Ended")
+                    {
+                        <a href="/Feedbacks/Create/@item.Reservation_Id">Add Feedback</a>
+                        @Html.DisplayName(" | ")
+                    }
+                    @Html.ActionLink("Details", "Details", new { id = item.Reservation_Id }) |
+                    @Html.ActionLink("Directions", "Directions", new { id = item.Reservation_Id })
+                    @if (ViewData.ContainsKey("UserType") && ViewData["UserType"].ToString() != "Driver" && item.Status == "Not Assigned" ||
+                    ViewData.ContainsKey("UserType") && ViewData["UserType"].ToString() != "Driver" && item.Status == "Assigned" ||
+                    ViewData.ContainsKey("UserType") && ViewData["UserType"].ToString() != "Driver" && item.Status == "Rejected")
+                    {
+                        @Html.DisplayName(" | ")
+                        @Html.ActionLink("Delete", "Delete", new { id = item.Reservation_Id })
+                    }
+                </td>
+            </tr>
+        }
+
+    </table>
+    <br /><br />
+
+    <div>
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+        @Html.PagedListPager(Model, page => Url.Action("Index",
+        new { page, sortOrder = ViewBag.CurrentSort, state = ViewBag.CurrentState, currentFilter = ViewBag.CurrentFilter }))
+    </div>
+    <p>
+        @Html.ActionLink("Back to Home", "Index", "Home")
+    </p>
+}

@@ -1,0 +1,19 @@
+﻿
+@{
+    ViewBag.Title = "Driver Selection";
+}
+
+<h2>Driver Selection</h2>
+<hr />
+@if (ViewBag.Status != null && Convert.ToBoolean(ViewBag.Status))
+{
+    <div class="alert alert-success">
+        <strong>Congratulations!</strong> @ViewBag.Message <strong><a href="/Reservations/Index/@ViewData["Username"]">Click here to see the reservations list</a></strong>
+    </div>
+}
+else
+{
+    <div class="alert alert-danger">
+        <strong>Error!</strong> @ViewBag.Message <strong><a href="/Reservations/SelectDriver/@ViewData["Reservation_Id"]">Go Back to Drivers List</a></strong>
+    </div>
+}

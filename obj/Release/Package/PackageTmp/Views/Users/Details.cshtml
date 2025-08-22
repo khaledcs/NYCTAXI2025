@@ -1,0 +1,112 @@
+﻿@model ABC_Taxi_System.Models.User
+
+@{
+    ViewBag.Title = "User Details";
+}
+
+@if (ViewData.ContainsKey("Username") && ViewData["Username"].ToString() == Model.Username ||
+    (Model.UserType == "Operator" && ViewData.ContainsKey("UserType") && ViewData["UserType"].ToString() == "Operator"))
+{
+    <h2>User Details</h2>
+    <h4>For: @Model.FirstName @Model.LastName | @Model.Username</h4>
+    <div>
+        <hr />
+        <dl class="dl-location-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Username)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Username)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.UserType)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.UserType)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.FirstName)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.LastName)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.LastName)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Phone)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Phone)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Email)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Email)
+            </dd>
+
+            @if (ViewData.ContainsKey("UserType") && ViewData["UserType"].Equals("Driver") && Model.DriverVehicle != null)
+            {
+                <dt>
+                    @Html.DisplayNameFor(model => model.DriverVehicle.VehicleType.Type)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.DriverVehicle.VehicleType.Type)
+                </dd>
+            }
+            @if (ViewData.ContainsKey("UserType") && ViewData["UserType"].Equals("Driver") && Model.DriverLocation != null)
+            {
+                <dt>
+                    @Html.DisplayNameFor(model => model.DriverLocation.City)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.DriverLocation.City)
+                </dd>
+            }
+
+            <dt>
+                @Html.DisplayNameFor(model => model.IsEmailVerified)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.IsEmailVerified)
+            </dd>
+
+        </dl>
+    </div>
+    <p>
+        @Html.ActionLink("Update", "Edit", new { id = Model.Username }) |
+        @Html.ActionLink("Delete", "Delete", new { id = Model.Username }) |
+        @if (ViewData.ContainsKey("UserType") && ViewData["UserType"].Equals("Operator"))
+        {
+            @Html.ActionLink("Back to List", "Index", "Users")
+        }
+        else
+        {
+            @Html.ActionLink("Back to Home", "Index", "Home")
+        }
+    </p>
+}
+else
+{
+    <div class="alert alert-warning text-align-center" style="margin-top:20px;">
+        Sorry, you do not have the permission to access this page. @ViewBag.Message<strong><a href="/Home/Index">Go Back to Home Page</a></strong>
+    </div>
+}

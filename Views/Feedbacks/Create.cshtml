@@ -1,0 +1,88 @@
+﻿@model NYC_Taxi_System.Models.Feedback
+
+@{
+    ViewBag.Title = "Add Feedback";
+}
+
+@if (ViewData.ContainsKey("UserType") && ViewData["UserType"].ToString() != "Passenger" ||
+    ViewData.ContainsKey("Username") && ViewData["Username"].ToString() != ViewData["Passenger"].ToString())
+{
+    <div class="alert alert-warning text-align-center" style="margin-top:20px;">
+        Sorry, you do not have the permission to access this page. @ViewBag.Message<strong><a href="/Home/Index">Go Back to Home Page</a></strong>
+    </div>
+}
+else
+{
+    <h2>Add Feedback</h2>
+
+    using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <input name="Feedback_Id" value="@Url.RequestContext.RouteData.Values["id"]" type="hidden">
+            @Html.Hidden("Driver", ViewData["Driver"])
+
+            <div class="row">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="col-md-6">
+                            @Html.LabelFor(model => model.Rating, htmlAttributes: new { @class = "control-label" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="col-md-6">
+                            <fieldset class="rating" style="margin-left:-6px">
+                                <input type="radio" id="star5" name="Rating" value="5" /><label class="full" for="star5" title="Awesome - 5 stars"></label>
+                                <input type="radio" id="star4half" name="Rating" value="4.5" /><label class="half" for="star4half" title="Awesome - 4.5 stars"></label>
+                                <input type="radio" id="star4" name="Rating" value="4" /><label class="full" for="star4" title="Pretty good - 4 stars"></label>
+                                <input type="radio" id="star3half" name="Rating" value="3.5" /><label class="half" for="star3half" title="Pretty good - 3.5 stars"></label>
+                                <input type="radio" id="star3" name="Rating" value="3" /><label class="full" for="star3" title="Good - 3 stars"></label>
+                                <input type="radio" id="star2half" name="Rating" value="2.5" /><label class="half" for="star2half" title="Good - 2.5 stars"></label>
+                                <input type="radio" id="star2" name="Rating" value="2" /><label class="full" for="star2" title="Bad - 2 stars"></label>
+                                <input type="radio" id="star1half" name="Rating" value="1.5" /><label class="half" for="star1half" title="Bad - 1.5 stars"></label>
+                                <input type="radio" id="star1" name="Rating" value="1" /><label class="full" for="star1" title="Very bad - 1 star"></label>
+                                <input type="radio" id="starhalf" name="Rating" value="0.5" /><label class="half" for="starhalf" title="Very bad - 0.5 stars"></label>
+                            </fieldset>
+                            @Html.ValidationMessageFor(model => model.Rating, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="col-md-12" style="padding-top:20px">
+                            @Html.LabelFor(model => model.Comment, htmlAttributes: new { @class = "control-label" })
+                            <div class="inputWithIcon">
+                                @Html.EditorFor(model => model.Comment, new { htmlAttributes = new { @class = "form-control", placeholder = "(Optional)" } })
+                                <i class="fas fa-comment"></i>
+                                @Html.ValidationMessageFor(model => model.Comment, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="col-md-1">
+                            <button type="submit" class="btn btn-warning" style="margin-top: 20px"><i class="fas fa-star-half-alt"></i> Add</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <div>
+        <a href="/Reservations/Index/@ViewData["Username"]">Back to List</a>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

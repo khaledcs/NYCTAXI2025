@@ -1,0 +1,128 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="ABC_DBModelStoreContainer" CdmEntityContainer="ABC_DBEntities">
+    <EntitySetMapping Name="DriverAvailabilities">
+      <EntityTypeMapping TypeName="ABC_DBModel.DriverAvailability">
+        <MappingFragment StoreEntitySet="DriverAvailability">
+          <ScalarProperty Name="Driver" ColumnName="Driver" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DriverLocations">
+      <EntityTypeMapping TypeName="ABC_DBModel.DriverLocation">
+        <MappingFragment StoreEntitySet="DriverLocation">
+          <ScalarProperty Name="Driver" ColumnName="Driver" />
+          <ScalarProperty Name="StreetNo" ColumnName="StreetNo" />
+          <ScalarProperty Name="Route" ColumnName="Route" />
+          <ScalarProperty Name="City" ColumnName="City" />
+          <ScalarProperty Name="Province" ColumnName="Province" />
+          <ScalarProperty Name="ZipCode" ColumnName="ZipCode" />
+          <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+          <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DriverVehicles">
+      <EntityTypeMapping TypeName="ABC_DBModel.DriverVehicle">
+        <MappingFragment StoreEntitySet="DriverVehicle">
+          <ScalarProperty Name="Driver" ColumnName="Driver" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="Seats" ColumnName="Seats" />
+          <ScalarProperty Name="Brand" ColumnName="Brand" />
+          <ScalarProperty Name="VRN" ColumnName="VRN" />
+          <ScalarProperty Name="LicenseNumber" ColumnName="LicenseNumber" />
+          <ScalarProperty Name="InsuranceNumber" ColumnName="InsuranceNumber" />
+          <ScalarProperty Name="NIC" ColumnName="NIC" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Reservations">
+      <EntityTypeMapping TypeName="ABC_DBModel.Reservation">
+        <MappingFragment StoreEntitySet="Reservation">
+          <ScalarProperty Name="Reservation_Id" ColumnName="Reservation_Id" />
+          <ScalarProperty Name="Passenger" ColumnName="Passenger" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="Phone" ColumnName="Phone" />
+          <ScalarProperty Name="PickUpDate" ColumnName="PickUpDate" />
+          <ScalarProperty Name="PickUpTime" ColumnName="PickUpTime" />
+          <ScalarProperty Name="Vehicle" ColumnName="Vehicle" />
+          <ScalarProperty Name="PickUpStreetNo" ColumnName="PickUpStreetNo" />
+          <ScalarProperty Name="PickUpRoute" ColumnName="PickUpRoute" />
+          <ScalarProperty Name="PickUpCity" ColumnName="PickUpCity" />
+          <ScalarProperty Name="PickUpProvince" ColumnName="PickUpProvince" />
+          <ScalarProperty Name="PickUpZipCode" ColumnName="PickUpZipCode" />
+          <ScalarProperty Name="DropStreetNo" ColumnName="DropStreetNo" />
+          <ScalarProperty Name="DropRoute" ColumnName="DropRoute" />
+          <ScalarProperty Name="DropCity" ColumnName="DropCity" />
+          <ScalarProperty Name="DropProvince" ColumnName="DropProvince" />
+          <ScalarProperty Name="DropZipCode" ColumnName="DropZipCode" />
+          <ScalarProperty Name="Driver" ColumnName="Driver" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="PickUpLat" ColumnName="PickUpLat" />
+          <ScalarProperty Name="PickUpLng" ColumnName="PickUpLng" />
+          <ScalarProperty Name="Charge" ColumnName="Charge" />
+          <ScalarProperty Name="OnHireDistance" ColumnName="OnHireDistance" />
+          <ScalarProperty Name="OverallDistance" ColumnName="OverallDistance" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Users">
+      <EntityTypeMapping TypeName="ABC_DBModel.User">
+        <MappingFragment StoreEntitySet="User">
+          <ScalarProperty Name="Username" ColumnName="Username" />
+          <ScalarProperty Name="UserType" ColumnName="UserType" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="Phone" ColumnName="Phone" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="IsEmailVerified" ColumnName="IsEmailVerified" />
+          <ScalarProperty Name="ActivationCode" ColumnName="ActivationCode" />
+          <ScalarProperty Name="ResetPasswordCode" ColumnName="ResetPasswordCode" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="VehicleTypes">
+      <EntityTypeMapping TypeName="ABC_DBModel.VehicleType">
+        <MappingFragment StoreEntitySet="VehicleType">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="Rate" ColumnName="Rate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="WaitingTimes">
+      <EntityTypeMapping TypeName="ABC_DBModel.WaitingTime">
+        <MappingFragment StoreEntitySet="WaitingTime">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+          <ScalarProperty Name="Duration" ColumnName="Duration" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Feedbacks">
+      <EntityTypeMapping TypeName="ABC_DBModel.Feedback">
+        <MappingFragment StoreEntitySet="Feedback">
+          <ScalarProperty Name="Comment" ColumnName="Comment" />
+          <ScalarProperty Name="Rating" ColumnName="Rating" />
+          <ScalarProperty Name="Driver" ColumnName="Driver" />
+          <ScalarProperty Name="Feedback_Id" ColumnName="Feedback_Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DriverStatusCounts">
+      <EntityTypeMapping TypeName="ABC_DBModel.DriverStatusCount">
+        <MappingFragment StoreEntitySet="DriverStatusCount">
+          <ScalarProperty Name="Date" ColumnName="Date" />
+          <ScalarProperty Name="OfflineCount" ColumnName="OfflineCount" />
+          <ScalarProperty Name="OnlineCount" ColumnName="OnlineCount" />
+          <ScalarProperty Name="Driver" ColumnName="Driver" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

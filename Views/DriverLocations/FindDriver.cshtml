@@ -1,0 +1,58 @@
+﻿@model NYC_Taxi_System.Models.FindAccount
+
+@{
+    ViewBag.Title = "Find Driver";
+}
+
+@if (ViewData.ContainsKey("UserType") && ViewData["UserType"].ToString() != "Operator")
+{
+    <div class="alert alert-warning text-align-center" style="margin-top:20px;">
+        Sorry, you do not have the permission to access this page. @ViewBag.Message<strong><a href="/Home/Index">Go Back to Home Page</a></strong>
+    </div>
+}
+else
+{
+    <h2>Location | Find Driver</h2>
+
+    using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            <hr />
+
+            @if (ViewBag.Message != null)
+            {
+                <div class="alert alert-danger">
+                    <strong>Error!</strong> @ViewBag.Message
+                </div>
+            }
+
+            <div class="row">
+                <div class="col-md-6">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.LabelFor(model => model.UsernameOrEmail, htmlAttributes: new { @class = "control-label" })
+                    <div class="inputWithIcon">
+                        @Html.EditorFor(model => model.UsernameOrEmail, new { htmlAttributes = new { @class = "form-control", placeholder = "Driver's Username or Email" } })
+                        <i class="fas fa-envelope"></i>
+                        @Html.ValidationMessageFor(model => model.UsernameOrEmail, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-1">
+                            <button type="submit" class="btn btn-warning" style="margin-top: 20px"><i class="fas fa-share-square"></i> Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index", "DriverLocations")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

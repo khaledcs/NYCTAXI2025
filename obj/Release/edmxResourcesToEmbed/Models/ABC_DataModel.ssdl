@@ -1,0 +1,318 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ABC_DBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="DriverAvailability">
+    <Key>
+      <PropertyRef Name="Driver" />
+    </Key>
+    <Property Name="Driver" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Status" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="DriverLocation">
+    <Key>
+      <PropertyRef Name="Driver" />
+    </Key>
+    <Property Name="Driver" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="StreetNo" Type="varchar" MaxLength="10" />
+    <Property Name="Route" Type="varchar" MaxLength="255" Nullable="false" />
+    <Property Name="City" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Province" Type="varchar" MaxLength="2" Nullable="false" />
+    <Property Name="ZipCode" Type="varchar" MaxLength="5" />
+    <Property Name="Latitude" Type="decimal" Precision="18" Scale="7" Nullable="false" />
+    <Property Name="Longitude" Type="decimal" Precision="18" Scale="7" Nullable="false" />
+  </EntityType>
+  <EntityType Name="DriverStatusCount">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Driver" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="OnlineCount" Type="int" Nullable="false" />
+    <Property Name="OfflineCount" Type="int" Nullable="false" />
+    <Property Name="Date" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="DriverVehicle">
+    <Key>
+      <PropertyRef Name="Driver" />
+    </Key>
+    <Property Name="Driver" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Type" Type="int" Nullable="false" />
+    <Property Name="Seats" Type="int" Nullable="false" />
+    <Property Name="Brand" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="VRN" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="LicenseNumber" Type="varchar" MaxLength="10" Nullable="false" />
+    <Property Name="InsuranceNumber" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="NIC" Type="varchar" MaxLength="12" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Feedback">
+    <Key>
+      <PropertyRef Name="Feedback_Id" />
+    </Key>
+    <Property Name="Feedback_Id" Type="int" Nullable="false" />
+    <Property Name="Driver" Type="varchar" MaxLength="50" />
+    <Property Name="Rating" Type="float" Nullable="false" />
+    <Property Name="Comment" Type="varchar" MaxLength="255" />
+  </EntityType>
+  <EntityType Name="Reservation">
+    <Key>
+      <PropertyRef Name="Reservation_Id" />
+    </Key>
+    <Property Name="Reservation_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Passenger" Type="varchar" MaxLength="50" />
+    <Property Name="FirstName" Type="varchar" MaxLength="50" />
+    <Property Name="LastName" Type="varchar" MaxLength="50" />
+    <Property Name="Phone" Type="varchar" MaxLength="10" />
+    <Property Name="PickUpDate" Type="datetime" Nullable="false" />
+    <Property Name="PickUpTime" Type="time" Precision="7" Nullable="false" />
+    <Property Name="Vehicle" Type="int" Nullable="false" />
+    <Property Name="PickUpStreetNo" Type="varchar" MaxLength="10" />
+    <Property Name="PickUpRoute" Type="varchar" MaxLength="255" Nullable="false" />
+    <Property Name="PickUpCity" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="PickUpProvince" Type="varchar" MaxLength="2" Nullable="false" />
+    <Property Name="PickUpZipCode" Type="varchar" MaxLength="5" />
+    <Property Name="DropStreetNo" Type="varchar" MaxLength="10" />
+    <Property Name="DropRoute" Type="varchar" MaxLength="255" Nullable="false" />
+    <Property Name="DropCity" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="DropProvince" Type="varchar" MaxLength="2" Nullable="false" />
+    <Property Name="DropZipCode" Type="varchar" MaxLength="5" />
+    <Property Name="Driver" Type="varchar" MaxLength="50" />
+    <Property Name="Status" Type="varchar" MaxLength="25" />
+    <Property Name="PickUpLat" Type="decimal" Precision="18" Scale="7" Nullable="false" />
+    <Property Name="PickUpLng" Type="decimal" Precision="18" Scale="7" Nullable="false" />
+    <Property Name="Charge" Type="decimal" Precision="18" Scale="4" Nullable="false" />
+    <Property Name="OnHireDistance" Type="decimal" Precision="18" Scale="1" Nullable="false" />
+    <Property Name="OverallDistance" Type="decimal" Precision="18" Scale="1" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="Username" />
+    </Key>
+    <Property Name="Username" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="UserType" Type="varchar" MaxLength="10" Nullable="false" />
+    <Property Name="FirstName" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="LastName" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Phone" Type="varchar" MaxLength="10" Nullable="false" />
+    <Property Name="Email" Type="varchar" MaxLength="255" Nullable="false" />
+    <Property Name="Password" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="IsEmailVerified" Type="bit" Nullable="false" />
+    <Property Name="ActivationCode" Type="uniqueidentifier" />
+    <Property Name="ResetPasswordCode" Type="uniqueidentifier" />
+  </EntityType>
+  <EntityType Name="VehicleType">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Type" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="Rate" Type="decimal" Precision="19" Scale="4" Nullable="false" />
+  </EntityType>
+  <EntityType Name="WaitingTime">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="StartTime" Type="datetime" />
+    <Property Name="Duration" Type="int" />
+    <Property Name="Status" Type="bit" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_Reservation_Feedback">
+    <End Role="Reservation" Type="Self.Reservation" Multiplicity="1" />
+    <End Role="Feedback" Type="Self.Feedback" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Reservation">
+        <PropertyRef Name="Reservation_Id" />
+      </Principal>
+      <Dependent Role="Feedback">
+        <PropertyRef Name="Feedback_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Reservation_WaitingTime">
+    <End Role="Reservation" Type="Self.Reservation" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="WaitingTime" Type="Self.WaitingTime" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Reservation">
+        <PropertyRef Name="Reservation_Id" />
+      </Principal>
+      <Dependent Role="WaitingTime">
+        <PropertyRef Name="Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_User_DriverAvailability">
+    <End Role="User" Type="Self.User" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="DriverAvailability" Type="Self.DriverAvailability" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Username" />
+      </Principal>
+      <Dependent Role="DriverAvailability">
+        <PropertyRef Name="Driver" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_User_DriverLocation">
+    <End Role="User" Type="Self.User" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="DriverLocation" Type="Self.DriverLocation" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Username" />
+      </Principal>
+      <Dependent Role="DriverLocation">
+        <PropertyRef Name="Driver" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_User_DriverStatus">
+    <End Role="DriverAvailability" Type="Self.DriverAvailability" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="DriverStatusCount" Type="Self.DriverStatusCount" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DriverAvailability">
+        <PropertyRef Name="Driver" />
+      </Principal>
+      <Dependent Role="DriverStatusCount">
+        <PropertyRef Name="Driver" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_User_DriverVehicle">
+    <End Role="User" Type="Self.User" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="DriverVehicle" Type="Self.DriverVehicle" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Username" />
+      </Principal>
+      <Dependent Role="DriverVehicle">
+        <PropertyRef Name="Driver" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_User_Feedback">
+    <End Role="User" Type="Self.User" Multiplicity="0..1" />
+    <End Role="Feedback" Type="Self.Feedback" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Username" />
+      </Principal>
+      <Dependent Role="Feedback">
+        <PropertyRef Name="Driver" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_User_Reservation_Driver">
+    <End Role="User" Type="Self.User" Multiplicity="0..1" />
+    <End Role="Reservation" Type="Self.Reservation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Username" />
+      </Principal>
+      <Dependent Role="Reservation">
+        <PropertyRef Name="Driver" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_User_Reservation_Passenger">
+    <End Role="User" Type="Self.User" Multiplicity="0..1" />
+    <End Role="Reservation" Type="Self.Reservation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Username" />
+      </Principal>
+      <Dependent Role="Reservation">
+        <PropertyRef Name="Passenger" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_VehicleType_DriverVehicle">
+    <End Role="VehicleType" Type="Self.VehicleType" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="DriverVehicle" Type="Self.DriverVehicle" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="VehicleType">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="DriverVehicle">
+        <PropertyRef Name="Type" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_VehicleType_Reservation">
+    <End Role="VehicleType" Type="Self.VehicleType" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Reservation" Type="Self.Reservation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="VehicleType">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Reservation">
+        <PropertyRef Name="Vehicle" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="ABC_DBModelStoreContainer">
+    <EntitySet Name="DriverAvailability" EntityType="Self.DriverAvailability" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="DriverLocation" EntityType="Self.DriverLocation" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="DriverStatusCount" EntityType="Self.DriverStatusCount" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="DriverVehicle" EntityType="Self.DriverVehicle" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Feedback" EntityType="Self.Feedback" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Reservation" EntityType="Self.Reservation" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="VehicleType" EntityType="Self.VehicleType" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="WaitingTime" EntityType="Self.WaitingTime" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Reservation_Feedback" Association="Self.FK_Reservation_Feedback">
+      <End Role="Reservation" EntitySet="Reservation" />
+      <End Role="Feedback" EntitySet="Feedback" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Reservation_WaitingTime" Association="Self.FK_Reservation_WaitingTime">
+      <End Role="Reservation" EntitySet="Reservation" />
+      <End Role="WaitingTime" EntitySet="WaitingTime" />
+    </AssociationSet>
+    <AssociationSet Name="FK_User_DriverAvailability" Association="Self.FK_User_DriverAvailability">
+      <End Role="User" EntitySet="User" />
+      <End Role="DriverAvailability" EntitySet="DriverAvailability" />
+    </AssociationSet>
+    <AssociationSet Name="FK_User_DriverLocation" Association="Self.FK_User_DriverLocation">
+      <End Role="User" EntitySet="User" />
+      <End Role="DriverLocation" EntitySet="DriverLocation" />
+    </AssociationSet>
+    <AssociationSet Name="FK_User_DriverStatus" Association="Self.FK_User_DriverStatus">
+      <End Role="DriverAvailability" EntitySet="DriverAvailability" />
+      <End Role="DriverStatusCount" EntitySet="DriverStatusCount" />
+    </AssociationSet>
+    <AssociationSet Name="FK_User_DriverVehicle" Association="Self.FK_User_DriverVehicle">
+      <End Role="User" EntitySet="User" />
+      <End Role="DriverVehicle" EntitySet="DriverVehicle" />
+    </AssociationSet>
+    <AssociationSet Name="FK_User_Feedback" Association="Self.FK_User_Feedback">
+      <End Role="User" EntitySet="User" />
+      <End Role="Feedback" EntitySet="Feedback" />
+    </AssociationSet>
+    <AssociationSet Name="FK_User_Reservation_Driver" Association="Self.FK_User_Reservation_Driver">
+      <End Role="User" EntitySet="User" />
+      <End Role="Reservation" EntitySet="Reservation" />
+    </AssociationSet>
+    <AssociationSet Name="FK_User_Reservation_Passenger" Association="Self.FK_User_Reservation_Passenger">
+      <End Role="User" EntitySet="User" />
+      <End Role="Reservation" EntitySet="Reservation" />
+    </AssociationSet>
+    <AssociationSet Name="FK_VehicleType_DriverVehicle" Association="Self.FK_VehicleType_DriverVehicle">
+      <End Role="VehicleType" EntitySet="VehicleType" />
+      <End Role="DriverVehicle" EntitySet="DriverVehicle" />
+    </AssociationSet>
+    <AssociationSet Name="FK_VehicleType_Reservation" Association="Self.FK_VehicleType_Reservation">
+      <End Role="VehicleType" EntitySet="VehicleType" />
+      <End Role="Reservation" EntitySet="Reservation" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

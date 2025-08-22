@@ -1,0 +1,428 @@
+﻿@model ABC_Taxi_System.Models.Reservation
+@{
+    ViewBag.Title = "Add Reservation";
+}
+@if (ViewData.ContainsKey("UserType") && ViewData["UserType"].Equals("Driver"))
+{
+    <div class="alert alert-warning text-align-center" style="margin-top:20px;">
+        Sorry, you do not have the permission to access this page. @ViewBag.Message<strong><a href="/Home/Index">Go Back to Home Page</a></strong>
+    </div>
+}
+else
+{
+    <h2>Add Reservation</h2>
+    if (ViewData.ContainsKey("UserType") && ViewData["UserType"].Equals("Passenger"))
+    {
+        <h4>For: @ViewData["FullName"] | @ViewData["Username"]</h4>
+    }
+
+    using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="row">
+                <div class="row" id="nameDiv">
+                    <div class="col-lg-12">
+                        <div class="col-md-6">
+                            @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "control-label" })
+                            <div class="inputWithIcon">
+                                @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control", placeholder = "First Name" } })
+                                <i class="fas fa-user-alt"></i>
+                                @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+                                @Html.ValidationMessage("FNameRequired", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label" })
+                            <div class="inputWithIcon">
+                                @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control", placeholder = "Last Name" } })
+                                <i class="fas fa-user-alt"></i>
+                                @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+                                @Html.ValidationMessage("LNameRequired", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="col-md-3">
+                            @Html.LabelFor(model => model.PickUpDate, htmlAttributes: new { @class = "control-label" })
+                            <div class="inputWithIcon" style="position: relative;">
+                                @Html.EditorFor(model => model.PickUpDate,
+            new { htmlAttributes = new { @class = "form-control", placeholder = "Pick-Up Date", style = "height: 60px; padding-right: 40px;" } })
+                                <i class="fas fa-calendar-alt"
+                                   style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); pointer-events: none;"></i>
+                                @Html.ValidationMessageFor(model => model.PickUpDate, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            @Html.LabelFor(model => model.PickUpTime, htmlAttributes: new { @class = "control-label" })
+                            <div class="inputWithIcon" style="position: relative;">
+                                @Html.EditorFor(model => model.PickUpTime, new { htmlAttributes = new { @class = "form-control", placeholder = "Pick-Up Time", style = "height: 60px; padding-right: 40px;" } })
+                                <i class="fas fa-clock"></i>
+                                @Html.ValidationMessageFor(model => model.PickUpTime, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            @Html.LabelFor(model => model.Vehicle, htmlAttributes: new { @class = "control-label" })
+                            <div class="inputWithIcon">
+                                @Html.DropDownListFor(model => model.Vehicle, (SelectList)ViewBag.Types, "-- Select Vehicle Type --", new { @class = "form-control", id = "type" })
+                                <i class="fas fa-car"></i>
+                                @Html.ValidationMessageFor(model => model.Vehicle, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-3" , id="phoneDiv">
+                            @Html.LabelFor(model => model.Phone, htmlAttributes: new { @class = "control-label" })
+                            <div class="inputWithIcon">
+                                @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control", placeholder = "Phone Number" } })
+                                <i class="fas fa-phone"></i>
+                                @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+                                @Html.ValidationMessage("PhoneRequired", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @if (ViewData.ContainsKey("UserType") && ViewData["UserType"].Equals("Passenger"))
+                {
+                    <input name="Passenger" value="@ViewData["Username"]" type="hidden">
+                    <script>
+                        document.getElementById("nameDiv").classList.add("hidden");
+                        document.getElementById("phoneDiv").classList.add("hidden");
+                    </script>
+                }
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="col-md-12">
+                            <hr />
+                            @Html.LabelFor(model => model.FullPickUpAddress, htmlAttributes: new { @class = "control-label" })
+                            <div class="buttonInside inputWithIcon">
+                                @Html.EditorFor(model => model.FullPickUpAddress, new { htmlAttributes = new { @class = "form-control", Style = "padding-right: 40px;", placeholder = "Type the Full Pick-Up Address here" } })
+                                <i class="fas fa-street-view"></i>
+                                <button type="button" id="currentLocation" data-toggle="tooltip" data-placement="right" title="Input Current Location" style="padding:0; background:none; border:none;"><i class="fas fa-globe currentLocation" aria-hidden="true"></i></button>
+                                @Html.ValidationMessageFor(model => model.FullPickUpAddress, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="display:none;">
+                    <div class="col-lg-12">
+                        <div class="col-md-4">
+                            @Html.LabelFor(model => model.PickUpStreetNo, htmlAttributes: new { @class = "control-label" })
+                            <div class="inputWithIcon">
+                                @Html.EditorFor(model => model.PickUpStreetNo, new { htmlAttributes = new { @class = "form-control", placeholder = "E.g. 23 (Optional)", id = "street_number", disabled = "disabled" } })
+                                <i class="fas fa-list-ol"></i>
+                                @Html.ValidationMessageFor(model => model.PickUpStreetNo, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            @Html.LabelFor(model => model.PickUpRoute, htmlAttributes: new { @class = "control-label" })
+                            <div class="inputWithIcon">
+                                @Html.EditorFor(model => model.PickUpRoute, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", placeholder = "E.g. De Fonseka Road", id = "route", disabled = "disabled" } })
+                                <i class="fas fa-map-signs"></i>
+                                @Html.ValidationMessageFor(model => model.PickUpRoute, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="display:none;">
+                    <div class="col-lg-12">
+                        <div class="col-md-4">
+                            @Html.LabelFor(model => model.PickUpCity, htmlAttributes: new { @class = "control-label" })
+                            <div class="inputWithIcon">
+                                @Html.EditorFor(model => model.PickUpCity, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", placeholder = "E.g. Colombo", id = "locality", disabled = "disabled" } })
+                                <i class="fas fa-map-marker-alt"></i>
+                                @Html.ValidationMessageFor(model => model.PickUpCity, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            @Html.LabelFor(model => model.PickUpProvince, htmlAttributes: new { @class = "control-label" })
+                            <div class="inputWithIcon">
+                                @Html.EditorFor(model => model.PickUpProvince, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", placeholder = "E.g. WP", id = "administrative_area_level_1", disabled = "disabled" } })
+                                <i class="fas fa-map"></i>
+                                @Html.ValidationMessageFor(model => model.PickUpProvince, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            @Html.LabelFor(model => model.PickUpZipCode, htmlAttributes: new { @class = "control-label" })
+                            <div class="inputWithIcon">
+                                @Html.EditorFor(model => model.PickUpZipCode, new { htmlAttributes = new { @class = "form-control", placeholder = "E.g. 20000 (Optional)", id = "postal_code", disabled = "disabled" } })
+                                <i class="fas fa-thumbtack"></i>
+                                @Html.ValidationMessageFor(model => model.PickUpZipCode, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="col-md-12">
+                            <hr />
+                            @Html.LabelFor(model => model.FullDropAddress, htmlAttributes: new { @class = "control-label" })
+                            <div class="inputWithIcon">
+                                @Html.EditorFor(model => model.FullDropAddress, new { htmlAttributes = new { @class = "form-control", Style = "margin-bottom: 28px;", placeholder = "Type the Full Destination Address here" } })
+                                <i class="fas fa-street-view"></i>
+                                @Html.ValidationMessageFor(model => model.FullDropAddress, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="display:none;">
+                    <div class="col-lg-12">
+                        <div class="col-md-4">
+                            @Html.LabelFor(model => model.DropStreetNo, htmlAttributes: new { @class = "control-label" })
+                            <div class="inputWithIcon">
+                                @Html.EditorFor(model => model.DropStreetNo, new { htmlAttributes = new { @class = "form-control street_number", placeholder = "E.g. 23 (Optional)", disabled = "disabled" } })
+                                <i class="fas fa-list-ol"></i>
+                                @Html.ValidationMessageFor(model => model.DropStreetNo, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            @Html.LabelFor(model => model.DropRoute, htmlAttributes: new { @class = "control-label" })
+                            <div class="inputWithIcon">
+                                @Html.EditorFor(model => model.DropRoute, new { htmlAttributes = new { @class = "form-control route", @readonly = "readonly", placeholder = "E.g. De Fonseka Road", disabled = "disabled" } })
+                                <i class="fas fa-map-signs"></i>
+                                @Html.ValidationMessageFor(model => model.DropRoute, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="display:none;">
+                    <div class="col-lg-12">
+                        <div class="col-md-4">
+                            @Html.LabelFor(model => model.DropCity, htmlAttributes: new { @class = "control-label" })
+                            <div class="inputWithIcon">
+                                @Html.EditorFor(model => model.DropCity, new { htmlAttributes = new { @class = "form-control locality", @readonly = "readonly", placeholder = "E.g. Colombo", disabled = "disabled" } })
+                                <i class="fas fa-map-marker-alt"></i>
+                                @Html.ValidationMessageFor(model => model.DropCity, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            @Html.LabelFor(model => model.DropProvince, htmlAttributes: new { @class = "control-label" })
+                            <div class="inputWithIcon">
+                                @Html.EditorFor(model => model.DropProvince, new { htmlAttributes = new { @class = "form-control administrative_area_level_1", @readonly = "readonly", placeholder = "E.g. WP", disabled = "disabled" } })
+                                <i class="fas fa-map"></i>
+                                @Html.ValidationMessageFor(model => model.DropProvince, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            @Html.LabelFor(model => model.DropZipCode, htmlAttributes: new { @class = "control-label" })
+                            <div class="inputWithIcon">
+                                @Html.EditorFor(model => model.DropZipCode, new { htmlAttributes = new { @class = "form-control postal_code", placeholder = "E.g. 20000 (Optional)", disabled = "disabled" } })
+                                <i class="fas fa-thumbtack"></i>
+                                @Html.ValidationMessageFor(model => model.DropZipCode, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <input id="Latitude" name="PickUpLat" type="hidden">
+                <input id="Longitude" name="PickUpLng" type="hidden">
+                <input id="fee" name="Charge" type="hidden">
+                <input id="OnHireDistance" name="OnHireDistance" type="hidden">
+                <input id="OverallDistance" name="OverallDistance" type="hidden">
+                <div class="col-md-12" style="margin-top:20px; margin-bottom:8px">
+                    <div id="map" style="width:100%;height:400px;"></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4 class="col-md-2" id="distance">Distance: n/a</h4>
+                        <h4 class="col-md-3" id="duration">Duration: n/a</h4>
+                        <h4 class="col-md-3" id="charge">Estimated Charge (LKR): n/a</h4>
+                        <p class="col-md-4" style="font-size:13px; color:red">*Note: Estimated Charge does 'not' include any waiting time charges.</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="col-md-1">
+                            <button type="submit" class="btn btn-warning" style="margin-top: 20px" onclick="enableFields()"><i class="fas fa-map-marked-alt"></i> Add</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <div>
+        @Html.ActionLink("Back to List", "Index", new { Id = ViewData["Username"] })
+    </div>
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <!-- Load Maps JS API using the inline bootstrap loader (no callback), per Google guidance -->
+    <script>
+      (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("v","weekly");e.set("key","@System.Web.Configuration.WebConfigurationManager.AppSettings["Google_API_Key"]");e.set("libraries","places");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({});
+    </script>
+    <script>
+        let map, directionsService, directionsRenderer;
+        let originLatLng = null, destinationLatLng = null;
+
+        async function initMapsStuff() {
+            // Load the required libraries
+            await google.maps.importLibrary("maps");
+            const { DirectionsService, DirectionsRenderer, TravelMode } =
+            await google.maps.importLibrary("routes"); // <-- this was missing
+            await google.maps.importLibrary("places");
+
+            // Map
+            map = new google.maps.Map(document.getElementById("map"), {
+                center: { lat: 50.4452, lng: -104.6189 },
+                zoom: 12,
+            });
+
+            // Directions
+            directionsService = new DirectionsService();
+            directionsRenderer = new DirectionsRenderer({ map });
+
+            // Autocomplete widgets
+            const pickupEl = new google.maps.places.PlaceAutocompleteElement();
+            const dropEl   = new google.maps.places.PlaceAutocompleteElement();
+            pickupEl.placeholder = "Enter pickup location";
+            dropEl.placeholder = "Enter drop-off location";
+
+            (document.getElementById("pickup-autocomplete-container") ??
+             document.querySelector('input[name="FullPickUpAddress"], #FullPickUpAddress')?.parentNode
+            ).prepend(pickupEl);
+
+            (document.getElementById("drop-autocomplete-container") ??
+             document.querySelector('input[name="FullDropAddress"], #FullDropAddress, input[name="FullDestinationAddress"]')?.parentNode
+            ).prepend(dropEl);
+
+            // When a prediction is chosen
+            pickupEl.addEventListener("gmp-select", async ({ placePrediction }) => {
+                const place = placePrediction.toPlace();
+                await place.fetchFields({ fields: ["formattedAddress", "location"] });
+                originLatLng = place.location;
+                const input = document.querySelector('input[name="FullPickUpAddress"], #FullPickUpAddress');
+                if (input) input.value = place.formattedAddress || "";
+                tryRoute(TravelMode.DRIVING);
+            });
+
+            dropEl.addEventListener("gmp-select", async ({ placePrediction }) => {
+                const place = placePrediction.toPlace();
+                await place.fetchFields({ fields: ["formattedAddress", "location"] });
+                destinationLatLng = place.location;
+                const input = document.querySelector('input[name="FullDropAddress"], #FullDropAddress, input[name="FullDestinationAddress"]');
+                if (input) input.value = place.formattedAddress || "";
+                tryRoute(TravelMode.DRIVING);
+            });
+        }
+
+        function tryRoute(travelMode) {
+            if (!originLatLng || !destinationLatLng) return;
+            directionsService.route({
+                origin: originLatLng,
+                destination: destinationLatLng,
+                travelMode,
+            }).then(res => {
+                directionsRenderer.setDirections(res);
+                const leg = res.routes?.[0]?.legs?.[0];
+                if (leg) {
+                    const d = document.getElementById("distance");
+                    const t = document.getElementById("duration");
+                    if (d) d.textContent = `Distance: ${leg.distance?.text ?? "n/a"}`;
+                    if (t) t.textContent = `Duration: ${leg.duration?.text ?? "n/a"}`;
+                }
+            }).catch(err => console.error("Directions error:", err));
+        }
+
+        // Kick off after the API bootstrap
+        (async function bootstrapMaps(){
+            try { await initMapsStuff(); }
+            catch (err) { console.error("Error initializing Maps:", err); }
+        })();
+
+        /*
+      let map, directionsService, directionsRenderer;
+      let originLatLng = null, destinationLatLng = null;
+
+      async function initMapsStuff() {
+        // Ensure libraries are loaded
+        await google.maps.importLibrary("maps");
+        await google.maps.importLibrary("places");
+
+        // Initialize map (default to Regina, SK)
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: { lat: 50.4452, lng: -104.6189 },
+          zoom: 12,
+        });
+        directionsService = new google.maps.DirectionsService();
+        directionsRenderer = new google.maps.DirectionsRenderer({ map });
+
+        // Create Place Autocomplete widgets
+        const pickupEl = new google.maps.places.PlaceAutocompleteElement();
+        pickupEl.id = "pickup-autocomplete";
+        pickupEl.placeholder = "Enter pickup location";
+        const pickupHost = document.getElementById("pickup-autocomplete-container");
+        if (pickupHost) pickupHost.appendChild(pickupEl);
+        else {
+          const input = document.querySelector('input[name="FullPickUpAddress"], #FullPickUpAddress');
+          if (input && input.parentNode) { input.parentNode.insertBefore(pickupEl, input); }
+        }
+
+        pickupEl.addEventListener("gmp-select", async ({ placePrediction }) => {
+          const place = placePrediction.toPlace();
+          await place.fetchFields({ fields: ["formattedAddress", "location"] });
+          originLatLng = place.location;
+          const input = document.querySelector('input[name="FullPickUpAddress"], #FullPickUpAddress');
+          if (input) input.value = place.formattedAddress || "";
+          tryRoute();
+        });
+
+        // Destination/drop-off, if present
+        const dropEl = new google.maps.places.PlaceAutocompleteElement();
+        dropEl.id = "drop-autocomplete";
+        dropEl.placeholder = "Enter drop-off location";
+        const dropHost = document.getElementById("drop-autocomplete-container");
+        if (dropHost) dropHost.appendChild(dropEl);
+        else {
+          const input = document.querySelector('input[name="FullDropAddress"], #FullDropAddress, input[name="FullDestinationAddress"]');
+          if (input && input.parentNode) { input.parentNode.insertBefore(dropEl, input); }
+        }
+
+        dropEl.addEventListener("gmp-select", async ({ placePrediction }) => {
+          const place = placePrediction.toPlace();
+          await place.fetchFields({ fields: ["formattedAddress", "location"] });
+          destinationLatLng = place.location;
+          const input = document.querySelector('input[name="FullDropAddress"], #FullDropAddress, input[name="FullDestinationAddress"]');
+          if (input) input.value = place.formattedAddress || "";
+          tryRoute();
+        });
+
+        // Optional: 'Use current location' button
+        const currentBtn = document.getElementById("currentLocation");
+        if (currentBtn && navigator.geolocation) {
+          currentBtn.addEventListener("click", () => {
+            navigator.geolocation.getCurrentPosition((pos) => {
+              const coords = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+              map.setCenter(coords);
+              originLatLng = coords;
+              tryRoute();
+            });
+          });
+        }
+      }
+
+      function tryRoute() {
+        if (!originLatLng || !destinationLatLng) return;
+        directionsService.route({
+          origin: originLatLng,
+          destination: destinationLatLng,
+          travelMode: google.maps.TravelMode.DRIVING,
+        }).then((res) => {
+          directionsRenderer.setDirections(res);
+          const leg = res.routes?.[0]?.legs?.[0];
+          const distanceEl = document.getElementById("distance");
+          const durationEl = document.getElementById("duration");
+          if (leg && distanceEl) distanceEl.textContent = `Distance: ${leg.distance?.text ?? "n/a"}`;
+          if (leg && durationEl) durationEl.textContent = `Duration: ${leg.duration?.text ?? "n/a"}`;
+        }).catch((err) => console.error("Directions error:", err));
+      }
+
+      // Kick off after JS API bootstraps
+      (async function bootstrapMaps(){ try { await initMapsStuff(); } catch (err) { console.error("Error initializing Maps:", err); } })();
+
+        */
+    </script>
+}

@@ -1,0 +1,367 @@
+﻿@model ABC_Taxi_System.Models.DriverLocation
+
+@{
+    ViewBag.Title = "Add Driver Location";
+}
+
+@if ((ViewData.ContainsKey("UserType") && ViewData["UserType"].Equals("Passenger")) ||
+    (ViewData.ContainsKey("UserType") && ViewData["UserType"].Equals("Driver") && ViewData.ContainsKey("Username") && ViewData["Username"].ToString() != Model.Driver))
+{
+    <div class="alert alert-warning text-align-center" style="margin-top:20px;">
+        Sorry, you do not have the permission to access this page. @ViewBag.Message<strong><a href="/Home/Index">Go Back to Home Page</a></strong>
+    </div>
+}
+else
+{
+    <h2>Add Location</h2>
+    <h4>For: @Model.Driver</h4>
+    using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <input name="Driver" value="@Model.Driver" type="hidden">
+
+            <div class="row">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="col-md-12">
+                            @Html.LabelFor(model => model.FullAddress, htmlAttributes: new { @class = "control-label" })
+                            <div class="buttonInside inputWithIcon">
+                                @Html.EditorFor(model => model.FullAddress, new { htmlAttributes = new { @class = "form-control", Style = "padding-right: 40px;", placeholder = "Type the Full Address here" } })
+                                <i class="fas fa-street-view"></i>
+                                <button type="button" id="currentLocation" data-toggle="tooltip" data-placement="right" title="Input Current Location" style="padding:0; background:none; border:none;"><i class="fas fa-globe currentLocation" aria-hidden="true"></i></button>
+                                @Html.ValidationMessageFor(model => model.FullAddress, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="col-md-4">
+                            @Html.LabelFor(model => model.StreetNo, htmlAttributes: new { @class = "control-label" })
+                            <div class="inputWithIcon">
+                                @Html.EditorFor(model => model.StreetNo, new { htmlAttributes = new { @class = "form-control", placeholder = "E.g. 23 (Optional)", id = "street_number", disabled = "disabled" } })
+                                <i class="fas fa-list-ol"></i>
+                                @Html.ValidationMessageFor(model => model.StreetNo, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="col-md-8">
+                            @Html.LabelFor(model => model.Route, htmlAttributes: new { @class = "control-label" })
+                            <div class="inputWithIcon">
+                                @Html.EditorFor(model => model.Route, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", placeholder = "E.g. De Fonseka Road", id = "route", disabled = "disabled" } })
+                                <i class="fas fa-map-signs"></i>
+                                @Html.ValidationMessageFor(model => model.Route, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="col-md-4">
+                            @Html.LabelFor(model => model.City, htmlAttributes: new { @class = "control-label" })
+                            <div class="inputWithIcon">
+                                @Html.EditorFor(model => model.City, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", placeholder = "E.g. Colombo", id = "locality", disabled = "disabled" } })
+                                <i class="fas fa-map-marker-alt"></i>
+                                @Html.ValidationMessageFor(model => model.City, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            @Html.LabelFor(model => model.Province, htmlAttributes: new { @class = "control-label" })
+                            <div class="inputWithIcon">
+                                @Html.EditorFor(model => model.Province, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", placeholder = "E.g. WP", id = "administrative_area_level_1", disabled = "disabled" } })
+                                <i class="fas fa-map"></i>
+                                @Html.ValidationMessageFor(model => model.Province, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            @Html.LabelFor(model => model.ZipCode, htmlAttributes: new { @class = "control-label" })
+                            <div class="inputWithIcon">
+                                @Html.EditorFor(model => model.ZipCode, new { htmlAttributes = new { @class = "form-control", placeholder = "E.g. 20000 (Optional)", id = "postal_code", disabled = "disabled" } })
+                                <i class="fas fa-thumbtack"></i>
+                                @Html.ValidationMessageFor(model => model.ZipCode, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                @Html.HiddenFor(model => model.Latitude, new { id = "Latitude" })
+                @Html.HiddenFor(model => model.Longitude, new { id = "Longitude" })
+
+                <div class="col-md-12" style="margin-top:20px; margin-bottom:8px">
+                    <div id="map" style="width:100%;height:400px;"></div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="col-md-1">
+                            <button type="submit" class="btn btn-warning" style="margin-top: 20px" onclick="enableFields()"><i class="fas fa-map-marked-alt"></i> Add</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA0fRJretMIefmzJpG7c7IVCePfcWolr6g&signed_in=true&libraries=places&callback=initMap" async defer></script>
+
+    <script>
+        var autocomplete;
+        var componentForm = {
+            street_number: 'short_name',
+            route: 'long_name',
+            locality: 'long_name',
+            administrative_area_level_1: 'short_name',
+            postal_code: 'short_name'
+        };
+
+        // Const bounds of Sri Lanka
+        var SRI_LANKA_BOUNDS = {
+            north: 10,
+            south: 5.9,
+            west: 79,
+            east: 82,
+        };
+
+        // Note: This example requires user consent to location sharing when
+        // prompted by the browser. If user see the error "The Geolocation service
+        // failed.", it means user probably did not give permission for the browser to
+        // use location services.
+        function initMap() {
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: 7.8731, lng: 80.7718 }, // Location of Sri Lanka
+                restriction: {
+                    latLngBounds: SRI_LANKA_BOUNDS,
+                    strictBounds: false,
+                },
+                zoom: 10
+            });
+
+            // Add the traffic layer
+            var trafficLayer = new google.maps.TrafficLayer();
+            trafficLayer.setMap(map);
+
+            var infoWindow = new google.maps.InfoWindow;
+
+            // Try HTML5 geolocation.
+            // Get the coords of current position
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    var pos = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+                    // Set location in the map
+                    infoWindow.setPosition(pos);
+                    infoWindow.setContent('Your Current Location.');
+                    infoWindow.open(map);
+                    map.setCenter(pos);
+                }, function () {
+                    handleLocationError(true, infoWindow, map.getCenter());
+                });
+            } else {
+                // Browser doesn't support Geolocation
+                handleLocationError(false, infoWindow, map.getCenter());
+            }
+
+            function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+                infoWindow.setPosition(pos);
+                infoWindow.setContent(browserHasGeolocation ?
+                    'Error: The Geolocation service failed.' :
+                    'Error: Your browser doesn\'t support geolocation.');
+                infoWindow.open(map);
+            }
+
+            new AutocompleteHandler(map);
+        }
+
+        // CurrentLocation button click event
+        $("#currentLocation").click(function () {
+
+            var infoWindow = new google.maps.InfoWindow;
+
+            // Try HTML5 geolocation.
+            if (navigator.geolocation) {
+                // Getting the current location coordinates
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    var pos = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+
+                    // Get longitude and latitude values into the fields
+                    document.getElementById("Latitude").value = pos.lat;
+                    document.getElementById("Longitude").value = pos.lng;
+
+                    // Convert the coords into address
+                    var geocoder = new google.maps.Geocoder();
+                    geocoder.geocode({ 'location': pos }, function (results, status) {
+                        if (status === 'OK') {
+                            var posi = results[0];
+                            document.getElementById("FullAddress").value = posi.formatted_address; // Fill the textbox
+                            fillInAddress(posi); // Fill in the fields
+                            // Alter the map
+                            map.zoom = 13;
+                            map.setCenter(pos);
+                            marker.setPosition(pos);
+                        } else {
+                            alert('Geocode was not successful for the following reason: ' + status);
+                        }
+                    });
+
+                }, function () {
+                    handleLocationError(true, infoWindow, map.getCenter());
+                });
+            } else {
+                // Browser doesn't support Geolocation
+                handleLocationError(false, infoWindow, map.getCenter());
+            }
+
+            function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+                infoWindow.setPosition(pos);
+                infoWindow.setContent(browserHasGeolocation ?
+                    'Error: The Geolocation service failed.' :
+                    'Error: Your browser doesn\'t support geolocation.');
+                infoWindow.open(map);
+            }
+        });
+
+        // Function for handling location auto complete
+        function AutocompleteHandler(map) {
+            this.map = map;
+            this.PlaceLatLng = null;
+
+            // Create a marker
+            marker = new google.maps.Marker({
+                map: map,
+                title: "Location",
+                draggable: true,
+                animation: google.maps.Animation.DROP
+            });
+
+            // Create an auto complete field
+            autocomplete = new google.maps.places.Autocomplete(
+                (document.getElementById('FullAddress')),
+                {
+                    types: ['geocode'],
+                    componentRestrictions: { country: "lk" }
+                });
+
+            this.setupPlaceChangedListener(autocomplete);
+
+            // Convert the postion into address
+            var geocoder = new google.maps.Geocoder();
+            var position = null;
+            google.maps.event.addListener(marker, 'dragend', function (evt) {
+                position = marker.getPosition();
+               
+                // Get longitude and latitude values into the fields
+                document.getElementById("Latitude").value = evt.latLng.lat().toFixed(7);
+                document.getElementById("Longitude").value = evt.latLng.lng().toFixed(7);
+
+                geocoder.geocode({ 'location': position }, function (results, status) {
+                    if (status === 'OK') {
+                        var pos = results[0];
+                        document.getElementById("FullAddress").value = pos.formatted_address; // Fill the textbox
+                        fillInAddress(pos); // Fill in the fields
+                    } else {
+                        alert('Geocode was not successful for the following reason: ' + status);
+                    }
+                });
+            });
+        }
+
+        // PlacechangedListner
+        AutocompleteHandler.prototype.setupPlaceChangedListener = function (autocomplete) {
+            var me = this;
+            autocomplete.bindTo('bounds', this.map);
+            // Get the Place Id from auto complete text
+            autocomplete.addListener('place_changed', function (evt) {
+                var place = autocomplete.getPlace();
+                if (!place.place_id) {
+                    window.alert("Please select an option from the dropdown list.");
+                    return;
+                }
+
+                // Get the coordinates
+                me.PlaceLatLng = place.geometry.location; 
+
+                // Get longitude and latitude values into the fields
+                document.getElementById("Latitude").value = me.PlaceLatLng.lat().toFixed(7);
+                document.getElementById("Longitude").value = me.PlaceLatLng.lng().toFixed(7);  
+
+                // Alter the map and fields
+                me.map.setCenter(me.PlaceLatLng);
+                me.map.zoom = 13;
+                fillInAddress(); // Fill in the fields
+                me.route();
+            });
+        };
+
+        // Fill in the fields
+        function fillInAddress(pos) {
+            var place = null;
+            // Get the place details from the autocomplete object.
+            if (!pos) {
+                place = autocomplete.getPlace();
+            }
+            else {
+                place = pos;
+            }
+
+            for (var component in componentForm) {
+                document.getElementById(component).value = '';
+                document.getElementById(component).disabled = false;
+            }
+
+            // Get each component of the address from the place details
+            // and fill the corresponding field on the form.
+            for (var i = 0; i < place.address_components.length; i++) {
+                var addressType = place.address_components[i].types[0];
+                if (componentForm[addressType]) {
+                    var val = place.address_components[i][componentForm[addressType]];
+                    document.getElementById(addressType).value = val;
+                }
+            }
+            disableFields();
+        }
+
+        // Disable fields
+        function disableFields() {
+            document.getElementById('route').disabled = true;
+            document.getElementById('locality').disabled = true;
+            document.getElementById('administrative_area_level_1').disabled = true;
+        }
+
+        // Enable fields
+        function enableFields() {
+            document.getElementById('route').disabled = false;
+            document.getElementById('locality').disabled = false;
+            document.getElementById('administrative_area_level_1').disabled = false;
+        }
+
+        AutocompleteHandler.prototype.route = function () {
+            if (!this.PlaceLatLng) {
+                return;
+            }
+
+            // Set marker position
+            marker.setPosition(this.PlaceLatLng);
+        };
+    </script>
+}

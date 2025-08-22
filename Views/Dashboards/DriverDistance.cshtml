@@ -1,0 +1,112 @@
+﻿@model PagedList.IPagedList<NYC_Taxi_System.Models.DriverDailyDist>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewBag.Title = "Driver Daily Distance Coverage";
+}
+
+@if (ViewData.ContainsKey("UserType") && ViewData["UserType"].ToString() == "Passenger")
+{
+    <div class="alert alert-warning text-align-center" style="margin-top:20px;">
+        Sorry, you do not have the permission to access this page. @ViewBag.Message<strong><a href="/Home/Index">Go Back to Home Page</a></strong>
+    </div>
+}
+else
+{
+    <h2>Distance | Driver Daily Distance Coverage</h2>
+    <h4>Table View</h4>
+    <hr />
+
+    <ul class="pagination" style="margin-top:0">
+        <li class="page-item active"><a class="page-link" href="#">Table View</a></li>
+        <li class="page-item"><a class="page-link" href="/Dashboards/DriverDistanceCharts">Chart View</a></li>
+    </ul>
+    <br /><br />
+
+    using (Html.BeginForm("DriverDistance", "Dashboards", FormMethod.Get))
+    {
+        <div class="row">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="col-xs-2 inputWithIcon" style="max-width:18.8%; min-width:150px; margin-top:-28px">
+                        @Html.Label("Driver", htmlAttributes: new { @class = "control-label", style = "margin-bottom: -5px" })
+                        @if (ViewData["UserType"].ToString() == "Operator")
+                        {
+                            @Html.DropDownList("driver", (SelectList)ViewBag.Drivers, "-- Select Driver --", new { @class = "form-control" })
+                        }
+                        else
+                        {
+                            @Html.Hidden("driver", @ViewData["Username"].ToString())
+                            @Html.DropDownList("driver", (SelectList)ViewBag.Drivers, @ViewData["Username"].ToString(), new { @class = "form-control", disabled = "disabled" })
+                        }
+                        <i class="fas fa-user-tag" style="margin-top:28px; margin-left:15px"></i>
+                    </div>
+                    <div class="col-xs-2 indexBar inputWithIcon" style="max-width:18.8%; min-width:150px; margin-top:-28px">
+                        @Html.Label("From Date", htmlAttributes: new { @class = "control-label", style = "margin-bottom: -5px" })
+                        @Html.Editor("fromDate", new { htmlAttributes = new { @class = "form-control", type = "date" } })
+                        <i class="fas fa-calendar-alt" style="margin-top:28px; margin-left:15px"></i>
+                    </div>
+                    <div class="col-xs-2 indexBar inputWithIcon" style="max-width:18.8%; min-width:150px; margin-top:-28px; margin-right:27px">
+                        @Html.Label("To Date", htmlAttributes: new { @class = "control-label", style = "margin-bottom: -5px" })
+                        @Html.Editor("toDate", new { htmlAttributes = new { @class = "form-control", type = "date" } })
+                        <i class="fas fa-calendar-alt" style="margin-top:28px; margin-left:15px"></i>
+                    </div>
+                    <div class="col-xs-4 indexSearch inputWithIcon">
+                        @Html.Editor("searchString", ViewBag.CurrentFilter as string, new { htmlAttributes = new { @class = "form-control", placeholder = "Search" } })
+                        <i class="fas fa-search" style="margin-top:8px; margin-left:20px"></i>
+                    </div>
+                    <div class="col-xs-1" style="margin-bottom:8px">
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <table class="table table-striped table-hover table-bordered table-responsive">
+        <tr style="background:#f0ad4e; color:white">
+            <th>
+                @Html.DisplayName("Driver")
+            </th>
+            <th>
+                @Html.DisplayName("Date")
+            </th>
+            <th>
+                @Html.DisplayName("Distance converted as revenue (km)")
+            </th>
+            <th>
+                @Html.DisplayName("Full distance covered (km)")
+            </th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td class="warning">
+                    @Html.DisplayName(ViewData["Driver"].ToString())
+                </td>
+                <td>
+                    @Html.DisplayName(item.Date.ToLongDateString())
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OnHire) km
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Full) km
+                </td>
+            </tr>
+        }
+
+    </table>
+    <br /> <br />
+
+    <div>
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+        @Html.PagedListPager(Model, page => Url.Action("DriverDistance",
+        new { page, sortOrder = ViewBag.CurrentSort, driver = ViewBag.CurrentDriver, fromDate = ViewBag.FromDate, toDate = ViewBag.ToDate, currentFilter = ViewBag.CurrentFilter }))
+    </div>
+    <p>
+        @Html.ActionLink("Back to Home", "Index", "Home")
+    </p>
+}

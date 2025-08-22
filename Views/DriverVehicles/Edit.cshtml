@@ -1,0 +1,121 @@
+﻿@model NYC_Taxi_System.Models.DriverVehicle
+
+@{
+    ViewBag.Title = "Update Vehicle Details";
+}
+
+@if ((ViewData.ContainsKey("UserType") && ViewData["UserType"].Equals("Passenger")) ||
+    (ViewData.ContainsKey("UserType") && ViewData["UserType"].Equals("Driver") && ViewData.ContainsKey("Username") && ViewData["Username"].ToString() != Model.Driver))
+{
+    <div class="alert alert-warning text-align-center" style="margin-top:20px;">
+        Sorry, you do not have the permission to access this page. @ViewBag.Message<strong><a href="/Home/Index">Go Back to Home Page</a></strong>
+    </div>
+}
+else
+{
+    <h2>Update Vehicle Details</h2>
+    <h4>For: @Model.User.FirstName @Model.User.LastName | @Model.User.Username</h4>
+    using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.Driver)
+
+            <div class="row">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="col-md-4">
+                            @Html.LabelFor(model => model.Type, htmlAttributes: new { @class = "control-label" })
+                            <div class="inputWithIcon">
+                                @Html.DropDownListFor(model => model.Type, (SelectList)ViewBag.Types, "-- Select Vehicle Type --", new { @class = "form-control" })
+                                <i class="fas fa-car"></i>
+                                @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            @Html.LabelFor(model => model.Seats, htmlAttributes: new { @class = "control-label" })
+                            <div class="inputWithIcon">
+                                @Html.EditorFor(model => model.Seats, new { htmlAttributes = new { @class = "form-control", placeholder = "Number of Seats" } })
+                                <i class="fas fa-couch"></i>
+                                @Html.ValidationMessageFor(model => model.Seats, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            @Html.LabelFor(model => model.Brand, htmlAttributes: new { @class = "control-label" })
+                            <div class="inputWithIcon">
+                                @Html.EditorFor(model => model.Brand, new { htmlAttributes = new { @class = "form-control", placeholder = "E.g. Toyota" } })
+                                <i class="fas fa-globe"></i>
+                                @Html.ValidationMessageFor(model => model.Brand, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="col-md-6">
+                            @Html.LabelFor(model => model.VRN, htmlAttributes: new { @class = "control-label" })
+                            <div class="inputWithIcon">
+                                @Html.EditorFor(model => model.VRN, new { htmlAttributes = new { @class = "form-control", placeholder = "Vehicle Registration Number" } })
+                                <i class="fas fa-file-invoice"></i>
+                                @Html.ValidationMessageFor(model => model.VRN, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            @Html.LabelFor(model => model.LicenseNumber, htmlAttributes: new { @class = "control-label" })
+                            <div class="inputWithIcon">
+                                @Html.EditorFor(model => model.LicenseNumber, new { htmlAttributes = new { @class = "form-control", placeholder = "Driving Licence Number" } })
+                                <i class="fas fa-address-card"></i>
+                                @Html.ValidationMessageFor(model => model.LicenseNumber, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="col-md-6">
+                            @Html.LabelFor(model => model.InsuranceNumber, htmlAttributes: new { @class = "control-label" })
+                            <div class="inputWithIcon">
+                                @Html.EditorFor(model => model.InsuranceNumber, new { htmlAttributes = new { @class = "form-control", placeholder = "Vehicle Insurance Number" } })
+                                <i class="fas fa-file-contract"></i>
+                                @Html.ValidationMessageFor(model => model.InsuranceNumber, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            @Html.LabelFor(model => model.NIC, htmlAttributes: new { @class = "control-label" })
+                            <div class="inputWithIcon">
+                                @Html.EditorFor(model => model.NIC, new { htmlAttributes = new { @class = "form-control", placeholder = "National Identity Card (NIC) Number" } })
+                                <i class="fas fa-id-card"></i>
+                                @Html.ValidationMessageFor(model => model.NIC, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="col-md-1">
+                            <button type="submit" class="btn btn-warning" style="margin-top: 20px"><i class="fas fa-taxi"></i> Update</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <div>
+        @Html.ActionLink("Back", "Details", new { Id = Model.Driver })
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

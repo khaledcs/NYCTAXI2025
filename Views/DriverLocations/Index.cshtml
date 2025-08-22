@@ -1,0 +1,100 @@
+﻿@model PagedList.IPagedList<NYC_Taxi_System.Models.DriverLocation>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewBag.Title = "Driver Locations List";
+}
+
+@if (ViewData.ContainsKey("UserType") && ViewData["UserType"].ToString() != "Operator")
+{
+    <div class="alert alert-warning text-align-center" style="margin-top:20px;">
+        Sorry, you do not have the permission to access this page. @ViewBag.Message<strong><a href="/Home/Index">Go Back to Home Page</a></strong>
+    </div>
+}
+else
+{
+    <h2>Locations List</h2>
+    <hr />
+
+    using (Html.BeginForm("Index", "DriverLocations", FormMethod.Get))
+    {
+        <div class="row">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="col-xs-7 indexBar">
+                        <a class="btn btn-warning" href="~/DriverLocations/FindDriver" role="button"><i class="fas fa-map-marked-alt"></i> Add New</a>
+                    </div>
+                    <div class="col-xs-4 indexSearch inputWithIcon">
+                        @Html.Editor("searchString", ViewBag.CurrentFilter as string, new { htmlAttributes = new { @class = "form-control", placeholder = "Search" } })
+                        <i class="fas fa-search" style="margin-top:8px; margin-left:20px"></i>
+                    </div>
+                    <div class="col-xs-1" style="margin-bottom:8px">
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <table class="table table-striped table-hover table-bordered table-responsive">
+        <tr style="background:#f0ad4e; color:white">
+            <th>
+                @Html.DisplayName("Username")
+            </th>
+            <th>
+                @Html.DisplayName("Street No")
+            </th>
+            <th>
+                @Html.DisplayName("Route")
+            </th>
+            <th>
+                @Html.DisplayName("City")
+            </th>
+            <th>
+                @Html.DisplayName("Province")
+            </th>
+            <th>
+                @Html.DisplayName("Zip Code")
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td class="warning">
+                    @Html.DisplayFor(modelItem => item.User.Username)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StreetNo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Route)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.City)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Province)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ZipCode)
+                </td>
+                <td>
+                    @Html.ActionLink("Update", "Edit", new { id = item.Driver }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.Driver }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Driver })
+                </td>
+            </tr>
+        }
+
+    </table>
+    <br /><br />
+
+    <div>
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+        @Html.PagedListPager(Model, page => Url.Action("Index",
+        new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+    </div>
+}

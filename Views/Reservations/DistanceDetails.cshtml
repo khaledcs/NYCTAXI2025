@@ -1,0 +1,166 @@
+﻿
+@{
+    ViewBag.Title = "Distance Details";
+}
+
+@if (ViewData.ContainsKey("UserType") && ViewData["UserType"].ToString() == "Driver" || ViewData.ContainsKey("Status") && ViewData["Status"].ToString() == "Invalid")
+{
+    <div class="alert alert-warning text-align-center" style="margin-top:20px;">
+        Sorry, you do not have the permission to access this page. @ViewBag.Message<strong><a href="/Home/Index">Go Back to Home Page</a></strong>
+    </div>
+}
+else
+{
+    <h2>Distance Details</h2>
+    <hr />
+
+    <div class="row">
+        <div class="col-md-12" style="margin-bottom:0px">
+            <div id="map" style="width:100%;height:500px;"></div>
+        </div>
+    </div>
+    <hr />
+
+    <div class="row">
+        <h4 class="col-md-2" id="distance">Distance: n/a</h4>
+        <h4 class="col-md-3" id="duration">Duration: n/a</h4>
+    </div>
+    <br />
+
+    <p>
+        @Html.ActionLink("Back to List", "SelectDriver", new { Id = ViewData["resId"] })
+    </p>
+}
+
+@section Scripts {
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA0fRJretMIefmzJpG7c7IVCePfcWolr6g&signed_in=true&libraries=places&callback=initMap" async defer></script>
+
+    <script>
+        // Const bounds of Sri Lanka
+        var SRI_LANKA_BOUNDS = {
+            north: 10,
+            south: 5.9,
+            west: 79,
+            east: 82,
+        };
+
+        var map = null;
+        var directionsService = null;
+        var directionsDisplay = null;
+        var pickupLat = @ViewData["pickupLat"];
+        var pickupLng = @ViewData["pickupLng"];
+        var pickupLocation = '@ViewData["pickup"]';
+        var driverLocation = '@ViewData["driverLocation"]';
+        // Note: This example requires user consent to location sharing when
+        // prompted by the browser. If user see the error "The Geolocation service
+        // failed.", it means user probably did not give permission for the browser to
+        // use location services.
+        function initMap() {
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: 7.8731, lng: 80.7718 }, // Location of Sri Lanka
+                restriction: {
+                    latLngBounds: SRI_LANKA_BOUNDS,
+                    strictBounds: false,
+                },
+                zoom: 10,
+            });
+
+            // Add the traffic layer
+            var trafficLayer = new google.maps.TrafficLayer();
+            trafficLayer.setMap(map);
+
+            // Add directions services
+            directionsService = new google.maps.DirectionsService;
+            directionsDisplay = new google.maps.DirectionsRenderer;
+            directionsDisplay.setMap(map);
+
+            var radius = @ViewData["Radius"];
+            var color;
+            if (radius >= 2000) {
+                // Add a circle for pickup location to the map.
+                var circle = new google.maps.Circle({
+                    strokeColor: '#FF0000',
+                    strokeOpacity: 0.8,
+                    strokeWeight: 2,
+                    fillColor: '#FF0000',
+                    fillOpacity: 0.35,
+                    map: map,
+                    center: { lat: pickupLat, lng: pickupLng },
+                    radius: 2000 // In meters
+                });
+            }
+            if (radius >= 4000) {
+                // Add a circle for pickup location to the map.
+                var circle = new google.maps.Circle({
+                    strokeColor: '#0000ff',
+                    strokeOpacity: 0.8,
+                    strokeWeight: 2,
+                    fillColor: '#0000ff',
+                    fillOpacity: 0.35,
+                    map: map,
+                    center: { lat: pickupLat, lng: pickupLng },
+                    radius: 4000 // In meters
+                });
+            }
+            if (radius == 6000) {
+                // Add a circle for pickup location to the map.
+                var circle = new google.maps.Circle({
+                    strokeColor: '#00ff00',
+                    strokeOpacity: 0.8,
+                    strokeWeight: 2,
+                    fillColor: '#00ff00',
+                    fillOpacity: 0.35,
+                    map: map,
+                    center: { lat: pickupLat, lng: pickupLng },
+                    radius: 6000 // In meters
+                });
+            }
+
+            // Set up directions services
+            directionsService.route({
+                origin: pickupLocation,
+                destination: driverLocation,
+                travelMode: 'DRIVING'
+            }, function (response, status) {
+                if (status === 'OK') {
+                    directionsDisplay.setDirections(response);
+                } else {
+                    window.alert('Directions request failed due to ' + status);
+                }
+            });
+            initCalculate();
+        }
+
+        // Calculate distance and duration to arrive
+        function initCalculate() {
+            // Set up distance matrix services
+            var service = new google.maps.DistanceMatrixService();
+            service.getDistanceMatrix(
+                {
+                    origins: [pickupLocation],
+                    destinations: [driverLocation],
+                    travelMode: 'DRIVING',
+                    drivingOptions: {
+                        departureTime: new Date(Date.now() + 0),  // for the time N milliseconds from now.
+                        trafficModel: 'bestguess'
+                    }
+                }, callback);
+
+            function callback(response, status) {
+
+                if (status == 'OK') {
+
+                    var origins = response.originAddresses;
+                    var destinations = response.destinationAddresses;
+                    var results = response.rows[0].elements;
+                    var element = results[0];
+                    var distance = element.distance.text;
+                    var duration = element.duration.text;
+
+                    document.getElementById("distance").innerHTML = "Distance: " + distance; // Set approx. distance
+                    document.getElementById("duration").innerText = "Duration: About " + duration; // Set approx. duration
+                }
+            }
+        }
+    </script>
+}

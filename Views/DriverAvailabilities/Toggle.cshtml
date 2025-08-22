@@ -1,0 +1,109 @@
+﻿@model NYC_Taxi_System.Models.DriverAvailability
+
+@{
+    ViewBag.Title = "Driver Availability";
+}
+
+@if (ViewData.ContainsKey("UserType") && ViewData["UserType"].ToString() != "Driver")
+{
+    <div class="alert alert-warning text-align-center" style="margin-top:20px;">
+        Sorry, you do not have the permission to access this page. @ViewBag.Message<strong><a href="/Home/Index">Go Back to Home Page</a></strong>
+    </div>
+}
+else if (ViewData.ContainsKey("Vehicle") && ViewData["Vehicle"].ToString() != "Found" || ViewData.ContainsKey("Location") && ViewData["Location"].ToString() != "Found")
+{
+    <div class="alert alert-danger text-align-center" style="margin-top:20px;">
+        You have to add your vehicle and location details into the system before accessing this page. <strong><a href="/Home/Index">Go Back to Home Page</a></strong>
+    </div>
+}
+else
+{
+    <h2>Set Availability State</h2>
+    <h4>For: @ViewData["FullName"] | @ViewData["Username"]</h4>
+
+    using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <input name="Driver" value="@ViewData["Username"]" type="hidden">
+
+            <div class="toggle-align">
+                @if (ViewData.ContainsKey("Status") && ViewData["Status"].ToString() == "true")
+                {
+                    <input name="Status" type="checkbox" checked="checked" value="true" id="switch"><label for="switch">Toggle</label>
+                }
+                else
+                {
+                    <input name="Status" type="checkbox" value="true" id="switch"><label for="switch">Toggle</label>
+                }
+            </div>
+
+            <div class="row toggle-align">
+                <div class="form-group">
+                    <div class="col-md-1">
+                        <button type="submit" class="btn btn-warning" style="margin-bottom: 30px"><i class="fas fa-exchange-alt"></i> Update</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+
+<style>
+    input {
+        height: 0;
+        width: 0;
+        visibility: hidden;
+    }
+
+    label {
+        cursor: pointer;
+        text-indent: -9999px;
+        width: 200px;
+        height: 100px;
+        background: grey;
+        display: block;
+        border-radius: 100px;
+        position: relative;
+    }
+
+        label:after {
+            content: '';
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            width: 90px;
+            height: 90px;
+            background: #fff;
+            border-radius: 90px;
+            transition: 0.3s;
+        }
+
+    input:checked + label {
+        background: #f0ad4e;
+    }
+
+        input:checked + label:after {
+            left: calc(100% - 5px);
+            transform: translateX(-100%);
+        }
+
+    label:hover:after {
+        width: 120px;
+    }
+
+    .toggle-align {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 70px;
+        margin-bottom: 20px;
+    }
+</style>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

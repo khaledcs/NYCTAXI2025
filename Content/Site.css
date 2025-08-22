@@ -1,0 +1,654 @@
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea,
+.input-group {
+    max-width: 1450px;
+}
+
+    input.form-block,
+    select.form-block,
+    textarea.form-block {
+        max-width: none;
+    }
+
+    /* Custom css */
+    /*csslint important:false */
+    input[type="text"], textarea {
+        width: 100%;
+        min-width: 100%;
+        max-width: 100%;
+        max-height: 250px !important;
+        border: 1px solid #aaa;
+        border-radius: 4px;
+        margin: 8px 0;
+        outline: none;
+        padding: 8px;
+        transition: 0.3s;
+    }
+
+    input[type="password"] {
+        width: 100%;
+        border: 1px solid #aaa;
+        border-radius: 4px;
+        margin: 8px 0;
+        outline: none;
+        padding: 8px;
+        transition: 0.3s;
+    }
+
+    input[type="date"] {
+        width: 100%;
+        border: 1px solid #aaa;
+        border-radius: 4px;
+        margin: 8px 0;
+        outline: none;
+        padding: 8px;
+        transition: 0.3s;
+    }
+
+    input[type="time"] {
+        width: 100%;
+        border: 1px solid #aaa;
+        border-radius: 4px;
+        margin: 8px 0;
+        outline: none;
+        padding: 8px;
+        transition: 0.3s;
+    }
+
+    input[type="number"] {
+        width: 100%;
+        border: 1px solid #aaa;
+        border-radius: 4px;
+        margin: 8px 0 !important;
+        outline: none;
+        padding: 8px;
+        transition: 0.3s;
+    }
+
+    input[type="email"] {
+        width: 100%;
+        border: 1px solid #aaa;
+        border-radius: 4px;
+        margin: 8px 0;
+        outline: none;
+        padding: 8px;
+        transition: 0.3s;
+    }
+
+select {
+    width: 100%;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    margin: 8px 0;
+    outline: none;
+    padding: 8px;
+    transition: 0.3s;
+}
+
+textarea {
+    min-height: 150px !important;
+}
+
+    input[type="text"]:focus, textarea:focus {
+        border-color: #f0ad4e !important;
+        box-shadow: 0 0 8px 0 #f0ad4e !important;
+    }
+
+input[type="password"]:focus {
+    border-color: #f0ad4e;
+    box-shadow: 0 0 8px 0 #f0ad4e;
+}
+
+input[type="date"]:focus {
+    border-color: #f0ad4e;
+    box-shadow: 0 0 8px 0 #f0ad4e;
+}
+
+input[type="time"]:focus {
+    border-color: #f0ad4e;
+    box-shadow: 0 0 8px 0 #f0ad4e;
+}
+
+input[type="number"]:focus {
+    border-color: #f0ad4e;
+    box-shadow: 0 0 8px 0 #f0ad4e;
+}
+
+input[type="email"]:focus {
+    border-color: #f0ad4e;
+    box-shadow: 0 0 8px 0 #f0ad4e;
+}
+
+select:focus {
+    border-color: #f0ad4e !important;
+    box-shadow: 0 0 8px 0 #f0ad4e !important;
+}
+
+.inputWithIcon input[type="text"], textarea {
+    padding-left: 40px !important;
+}
+
+.inputWithIcon input[type="password"] {
+    padding-left: 40px;
+}
+
+.inputWithIcon input[type="date"] {
+    padding-left: 40px;
+}
+
+.inputWithIcon input[type="time"] {
+    padding-left: 40px;
+}
+
+.inputWithIcon input[type="number"] {
+    padding-left: 40px;
+}
+
+.inputWithIcon input[type="email"] {
+    padding-left: 40px;
+}
+
+.inputWithIcon select {
+    padding-left: 40px;
+}
+
+.inputWithIcon {
+    position: relative;
+}
+
+    .inputWithIcon i {
+        position: absolute;
+        left: 0;
+        top: 1px;
+        padding: 9px 10px;
+        color: #aaa;
+        transition: 0.3s;
+    }
+
+    .inputWithIcon input[type="text"]:focus + i, textarea:focus + i {
+        color: #f0ad4e;
+    }
+
+    .inputWithIcon input[type="password"]:focus + i {
+        color: #f0ad4e;
+    }
+
+    .inputWithIcon input[type="date"]:focus + i {
+        color: #f0ad4e;
+    }
+
+    .inputWithIcon input[type="time"]:focus + i {
+        color: #f0ad4e;
+    }
+
+    .inputWithIcon input[type="number"]:focus + i {
+        color: #f0ad4e;
+    }
+
+    .inputWithIcon input[type="email"]:focus + i {
+        color: #f0ad4e;
+    }
+
+    .inputWithIcon select:focus + i {
+        color: #f0ad4e;
+    }
+
+.box-shadow:hover {
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16),0 3px 6px rgba(0,0,0,0.23);
+}
+
+input[type=date] {
+    text-align: left;
+}
+
+input[type="date"]:before {
+    color: #aaa;
+    content: attr(placeholder) !important;
+    margin-right: 1em;
+}
+
+input[type=time] {
+    text-align: left;
+}
+
+input[type="time"]:before {
+    color: #aaa;
+    content: attr(placeholder) !important;
+    margin-right: 1em;
+}
+
+.buttonInside {
+    position: relative;
+}
+
+@media (min-width: 0px) {
+    .form-horizontal .control-label {
+        padding-top: 7px;
+        margin-bottom: 0;
+        text-align: right;
+    }
+}
+
+@media (max-width: 2000px) {
+    .indexBar {
+        width: 56.5%;
+    }
+
+    .rememberMe {
+        margin-left: -40px;
+    }
+
+    .currentLocation {
+        margin-left: 97%;
+    }
+}
+
+@media (max-width: 1199px) {
+    .indexBar {
+        width: 54.5%;
+    }
+
+    .rememberMe {
+        margin-left: -30px;
+    }
+
+    .currentLocation {
+        margin-left: 96%;
+    }
+}
+
+@media (max-width: 991px) {
+    .indexBar {
+        width: 44%;
+    }
+
+    .rememberMe {
+        margin-left: -20px;
+    }
+
+    .currentLocation {
+        margin-left: 95%;
+    }
+}
+
+@media (max-width: 767px) {
+    .indexBar {
+        width: 100%;
+        margin-bottom: 8px
+    }
+
+    .rememberMe {
+        margin-left: -15px;
+    }
+
+    .currentLocation {
+        margin-left: 94%;
+    }
+}
+
+@media (max-width: 540px) {
+    .currentLocation {
+        margin-left: 92%;
+    }
+}
+
+@media (max-width: 400px) {
+    .currentLocation {
+        margin-left: 91%;
+    }
+}
+
+@media (max-width: 360px) {
+    .currentLocation {
+        margin-left: 87%;
+    }
+}
+
+.indexSearch {
+    padding-right: 0;
+    margin-top: -8px;
+    min-width: 300px
+}
+
+@media (max-width: 430px) {
+    .indexSearch {
+        width: 100%;
+        padding-right: 15px;
+    }
+}
+
+@media (max-width: 767px) {
+    .nav-dropdown {
+        margin-top: -7px
+    }
+}
+
+@media (min-width: 768px) {
+    .dl-vehicle-horizontal dt {
+        float: left;
+        width: 250px;
+        overflow: hidden;
+        clear: left;
+        text-align: right;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .dl-vehicle-horizontal dd {
+        margin-left: 270px;
+    }
+
+    .dl-location-horizontal dt {
+        float: left;
+        width: 112px;
+        overflow: hidden;
+        clear: left;
+        text-align: right;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .dl-location-horizontal dd {
+        margin-left: 132px;
+    }
+}
+
+#right-panel {
+    font-family: 'Roboto','sans-serif';
+    line-height: 30px;
+    margin-bottom: 20px;
+}
+
+    #right-panel select, #right-panel input {
+        font-size: 15px;
+    }
+
+    #right-panel select {
+        width: 100%;
+    }
+
+    #right-panel i {
+        font-size: 12px;
+    }
+
+#right-panel {
+    height: 100%;
+    float: right;
+    width: 100%;
+    overflow: auto;
+}
+
+@media print {
+    #right-panel {
+        float: none;
+        width: auto;
+    }
+}
+
+.bg {
+    background-image: url(/Images/HomeBG.jpg);
+    height: 100%;
+    width: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    opacity: 0;
+}
+
+.captionFade {
+    opacity: 1;
+}
+
+.captionBG {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    color: #ffffff;
+    font-family: 'Script MT';
+    font-size: 50px;
+}
+
+@media (max-width: 2000px) {
+    .captionBG {
+        font-size: 55px;
+    }
+
+    .captionBGLogo {
+        height: 74px;
+    }
+}
+
+@media (max-width: 1199px) {
+    .captionBG {
+        font-size: 52px;
+    }
+
+    .captionBGLogo {
+        height: 68px;
+    }
+
+    .smallScreen {
+        visibility: hidden;
+    }
+
+    .indexSearch {
+        margin-left: -25px;
+    }
+}
+
+@media (max-width: 991px) {
+    .captionBG {
+        font-size: 48px;
+    }
+
+    .captionBGLogo {
+        height: 62px;
+    }
+
+    .indexSearch {
+        margin-left: 0px;
+    }
+}
+
+@media (max-width: 767px) {
+    .captionBG {
+        font-size: 45px;
+    }
+
+    .captionBGLogo {
+        height: 56px;
+    }
+}
+
+@media (max-width: 540px) {
+    .captionBG {
+        font-size: 32px;
+    }
+
+    .captionBGLogo {
+        height: 50px;
+    }
+}
+
+@media (max-width: 380px) {
+    .captionBG {
+        font-size: 26px;
+    }
+
+    .captionBGLogo {
+        height: 44px;
+    }
+}
+
+.image {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.overlay {
+    position: absolute;
+    bottom: 0;
+    left: 100%;
+    right: 0;
+    background-color: #f0ad4e;
+    background-image: url(/Images/HomePanel.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    overflow: hidden;
+    width: 0;
+    height: 100%;
+    transition: .5s ease-in;
+}
+
+.overlay-content {
+    position: relative;
+    top: 12%;
+    width: 100%;
+    text-align: center;
+    margin-top: 30px;
+    color: #ffffff;
+    opacity: 0;
+}
+
+.overlay a {
+    padding: 8px;
+    text-decoration: none;
+    font-size: 36px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+}
+
+    .overlay a:hover, .overlay a:focus {
+        color: #f1f1f1;
+    }
+
+.overlay .closebtn {
+    position: absolute;
+    top: 40px;
+    right: 20px;
+    font-size: 60px;
+}
+
+@media screen and (max-height: 450px) {
+    .overlay a {
+        font-size: 20px
+    }
+
+    .overlay .closebtn {
+        font-size: 40px;
+        top: 40px;
+        right: 10px;
+    }
+
+    .captionBG {
+        font-size: 30px;
+    }
+
+    .HomeLine1 {
+        margin-top: -250px !important;
+    }
+
+    .HomeLine2 {
+        margin-top: -120px !important;
+    }
+
+    .HomeLine3 {
+        margin-top: -80px !important;
+    }
+
+    .HomeLine4 {
+        margin-top: -40px !important;
+    }
+
+    .HomeLine5 {
+        margin-top: 0px !important;
+    }
+
+    .HomeLine6 {
+        margin-top: 50px !important;
+    }
+}
+
+blockquote {
+    border-left: 5px solid #f0ad4e;
+}
+
+/****** Style Star Rating Widget *****/
+fieldset, label {
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    font-size: 1.5em;
+    margin: 10px;
+}
+
+.rating {
+    border: none;
+    float: left;
+}
+
+    .rating > input {
+        display: none;
+    }
+
+    .rating > label:before {
+        margin: 5px;
+        font-size: 1.25em;
+        font-family: "Font Awesome 5 Free";
+        display: inline-block;
+        content: "\f005";
+        font-weight: 900;
+    }
+
+    .rating > .half:before {
+        content: "\f089";
+        position: absolute;
+    }
+
+    .rating > label {
+        color: #ddd;
+        float: right;
+    }
+
+    /***** CSS Magic to Highlight Stars on Hover *****/
+
+    .rating > input:checked ~ label, /* show gold star when clicked */
+    .rating:not(:checked) > label:hover, /* hover current star */
+    .rating:not(:checked) > label:hover ~ label {
+        color: #f0ad4e;
+    }
+        /* hover previous stars in list */
+
+        .rating > input:checked + label:hover, /* hover current star when changing rating */
+        .rating > input:checked ~ label:hover,
+        .rating > label:hover ~ input:checked ~ label, /* lighten current selection */
+        .rating > input:checked ~ label:hover ~ label {
+            color: #f2c079;
+        }
+/****** End Style Star Rating Widget *****/

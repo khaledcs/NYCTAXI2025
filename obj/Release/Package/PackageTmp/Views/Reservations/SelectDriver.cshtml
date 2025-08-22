@@ -1,0 +1,129 @@
+﻿@model PagedList.IPagedList<ABC_Taxi_System.Models.User>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewBag.Title = "Select Driver";
+}
+
+@if (ViewData.ContainsKey("UserType") && ViewData["UserType"].ToString() == "Driver" || ViewData.ContainsKey("Status") && ViewData["Status"].ToString() == "Invalid")
+{
+    <div class="alert alert-warning text-align-center" style="margin-top:20px;">
+        Sorry, you do not have the permission to access this page. @ViewBag.Message<strong><a href="/Home/Index">Go Back to Home Page</a></strong>
+    </div>
+}
+else
+{
+    <h2>Reservation | Select Driver</h2>
+    <hr />
+
+    if (ViewBag.Message != null)
+    {
+        <div class="alert alert-danger">
+            <strong>Error!</strong> @ViewBag.Message. <strong><a href="/Reservations/Index/@ViewData["Username"]">Go Back to the Reservations List</a></strong>
+        </div>
+    }
+    else
+    {
+        using (Html.BeginForm("SelectDriver", "Reservations", FormMethod.Get))
+        {
+            <div class="row">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="col-xs-7 indexBar">
+                        </div>
+                        <div class="col-xs-4 indexSearch inputWithIcon">
+                            @Html.Editor("searchString", ViewBag.CurrentFilter as string, new { htmlAttributes = new { @class = "form-control", placeholder = "Search" } })
+                            <i class="fas fa-search" style="margin-top:8px; margin-left:20px"></i>
+                        </div>
+                        <div class="col-xs-1" style="margin-bottom:8px">
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Search</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+        <table class="table table-striped table-hover table-bordered table-responsive">
+            <tr style="background:#f0ad4e; color:white">
+                <th>
+                    @Html.DisplayName("Username")
+                </th>
+                <th>
+                    @Html.DisplayName("Full Name")
+                </th>
+                <th>
+                    @Html.DisplayName("Phone Number")
+                </th>
+                <th>
+                    @Html.DisplayName("Location")
+                </th>
+                <th>
+                    @Html.DisplayName("Vehicle Type")
+                </th>
+                <th>
+                    @Html.DisplayName("Vehicle Brand")
+                </th>
+                <th>
+                    @Html.DisplayName("# of Seats")
+                </th>
+                <th>
+                    @Html.DisplayName("Avg Rating")
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model.Zip((List<string>)ViewData["Feedback"], Tuple.Create))
+            {
+                <tr>
+                    <td class="warning">
+                        @Html.DisplayFor(modelItem => item.Item1.Username)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Item1.FirstName)
+                        @Html.DisplayFor(modelItem => item.Item1.LastName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Item1.Phone)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Item1.DriverLocation.Route),
+                        @Html.DisplayFor(modelItem => item.Item1.DriverLocation.City),
+                        @Html.DisplayFor(modelItem => item.Item1.DriverLocation.Province)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Item1.DriverVehicle.VehicleType.Type)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Item1.DriverVehicle.Brand)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Item1.DriverVehicle.Seats)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Item2) / 5
+                    </td>
+                    <td>
+                        <a class="btn btn-xs btn-success" href="~/Reservations/DriverSelected?driverId=@item.Item1.Username&ResId=@Url.RequestContext.RouteData.Values["id"]" role="button">
+                            <i class="fas fa-check-circle"></i> Select
+                        </a> |
+                        @Html.ActionLink("Distance", "DistanceDetails", new { driverId = item.Item1.Username, ResId = Url.RequestContext.RouteData.Values["id"], radius = ViewData["Radius"] })
+                    </td>
+                </tr>
+
+
+            }
+
+        </table>
+        <br /> <br />
+
+        <div>
+            Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+            @Html.PagedListPager(Model, page => Url.Action("SelectDriver",
+            new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+        </div>
+        <p>
+            @Html.ActionLink("Back to List", "Index", new { Id = ViewData["Username"] })
+        </p>
+    }
+}

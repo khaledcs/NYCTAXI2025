@@ -1,0 +1,90 @@
+﻿@{
+    ViewBag.Title = "Contact";
+}
+
+
+<h2>@ViewBag.Title</h2>
+
+<address>
+    NYC Taxi<br />
+    No: 03,
+    <br />
+    00400, Regina, Saskatchewan<br />
+    Canada.<br /><br />
+    <abbr title="Phone">P:</abbr>
+    (639) 554 4471
+</address>
+
+<address>
+    <strong>Support:</strong>   <a href="mailto:khaledcs@gmail.com">khaledcs@gmail.com</a><br />
+    <strong>Marketing:</strong> <a href="mailto:rouzbehmoradian@gmail.com">rouzbehmoradian@gmail.com</a>
+</address>
+
+
+<div class="row">
+    <div class="col-md-12" style="margin-bottom:0px">
+        <div id="map" style="width:100%;height:400px;"></div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://maps.googleapis.com/maps/api/js?key=@System.Web.Configuration.WebConfigurationManager.AppSettings["Google_API_Key"]&signed_in=true&libraries=places&callback=initMap" async defer></script>
+
+    <script>
+        // Const bounds for Sri Lanka
+        var NEW_YORK_BOUNDS = {
+            //north: 10,
+            //south: 5.9,
+            //west: 79,
+            //east: 82,
+            north: 40.9176,
+            south: 40.4774,
+            west: -74.2591,
+            east: -73.7004,
+        };
+
+        var map = null;
+        var marker = null;
+        var PlaceLatLng = null;
+        // Note: This example requires user consent to location sharing when
+        // prompted by the browser. If user see the error "The Geolocation service
+        // failed.", it means user probably did not give permission for the browser to
+        // use location services.
+        function initMap() {
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: 40.7128, lng: -74.0060 }, // Location of New york
+                restriction: {
+                    latLngBounds: NEW_YORK_BOUNDS,
+                    strictBounds: false,
+                },
+                zoom: 10
+            });
+
+            var Address = '31-58 Munroe Pl, Regina, Saskatchewan, Canada';
+
+            // Convert the address into coordinates
+            var geocoder = new google.maps.Geocoder();
+            geocoder.geocode({ 'address': Address }, function (results, status) {
+
+                if (status === 'OK') {
+                    PlaceLatLng = results[0].geometry.location;
+
+                } else {
+                    alert('Geocode was not successful for the following reason: ' + status);
+                }
+
+                // Create a marker
+                marker = new google.maps.Marker({
+                    map: map,
+                    title: "NYC Taxi",
+                    animation: google.maps.Animation.DROP
+                });
+
+                // Place the location is the map
+                marker.setPosition(PlaceLatLng);
+                map.zoom = 13;
+                map.setCenter(marker.getPosition());
+            });
+        }
+    </script>
+}

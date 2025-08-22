@@ -1,0 +1,103 @@
+﻿@if (Request.IsAuthenticated && ViewData.ContainsKey("UserType"))
+{
+    if (ViewData["UserType"].Equals("Operator"))
+    {
+        @Html.AntiForgeryToken()
+
+        <ul class="nav navbar-nav">
+            <li class="dropdown nav-dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Manage <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="/Reservations/Index/@ViewData["Username"]">Taxi Reservations</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="/DriverLocations/Index">Driver Locations</a></li>
+                    <li><a href="/DriverVehicles/Index">Driver Vehicles</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="/VehicleTypes/Index">Vehicle Types</a></li>
+                    <li><a href="/Users/Index">Account Details</a></li>
+                </ul>
+            </li>
+        </ul>
+
+        <ul class="nav navbar-nav">
+            <li class="dropdown nav-dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Reports <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="/Dashboards/DriverRevenue">Daily & Total Revenue</a></li>
+                    <li><a href="/Dashboards/DriverMonthlyRevenue">Monthly Income & Commission</a></li>
+                    <li><a href="/Dashboards/DriverDistance">Daily Distance Coverage</a></li>
+                    <li><a href="/Dashboards/DriverStatus">Status Presentage</a></li>
+                </ul>
+            </li>
+        </ul>
+    }
+
+    else if (ViewData["UserType"].Equals("Driver"))
+    {
+        @Html.AntiForgeryToken()
+
+        <ul class="nav navbar-nav">
+            <li class="dropdown nav-dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Drive <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="/Reservations/Index/@ViewData["Username"]">Check Requests</a></li>
+                    <li><a href="/DriverAvailabilities/Toggle">Change Status</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="/DriverLocations/Details/@ViewData["Username"]">Manage Location</a></li>
+                    <li><a href="/DriverVehicles/Details/@ViewData["Username"]">Manage Vehicle</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="/Users/Details/@ViewData["Username"]">Manage Account</a></li>
+                </ul>
+            </li>
+        </ul>
+
+        <ul class="nav navbar-nav">
+            <li class="dropdown nav-dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Reports <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="/Dashboards/DriverRevenue">Daily & Total Revenue</a></li>
+                    <li><a href="/Dashboards/DriverMonthlyRevenue">Monthly Income & Commission</a></li>
+                    <li><a href="/Dashboards/DriverDistance">Daily Distance Coverage</a></li>
+                    <li><a href="/Dashboards/DriverStatus">Status Presentage</a></li>
+                </ul>
+            </li>
+        </ul>
+    }
+
+    else if (ViewData["UserType"].Equals("Passenger"))
+    {
+        @Html.AntiForgeryToken()
+
+        <ul class="nav navbar-nav">
+            <li class="dropdown nav-dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Ride <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="/Reservations/Index/@ViewData["Username"]">Taxi Reservations</a></li>
+                    <li><a href="/Feedbacks/Index">Manage Feedbacks</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="/Users/Details/@ViewData["Username"]">Manage Account</a></li>
+                </ul>
+            </li>
+        </ul>
+    }
+}
+
+@if (Request.IsAuthenticated)
+{
+    using (Html.BeginForm("Logout", "Users", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <ul class="nav navbar-nav navbar-right" style="margin-right:0">
+            <li><a href="/Users/Details/@ViewData["Username"]"><i class="fas fa-user-cog"></i> Hello, @ViewData["FullName"]!</a></li>
+            <li><a href="javascript:document.getElementById('logoutForm').submit()"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+    }
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li><a href="/Users/Create"><i class="fas fa-user-alt"></i> Sign Up</a></li>
+        <li><a href="/Users/Login"><i class="fas fa-sign-in-alt"></i> Login</a></li>
+    </ul>
+}
